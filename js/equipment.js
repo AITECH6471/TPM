@@ -144,6 +144,9 @@ export async function openEquipDetail(equipCode) {
           <tr style="border-bottom:1px solid var(--border)"><td style="padding:8px 12px;color:var(--text3)">제작사</td><td style="padding:8px 12px">${escapeHtml(pick(equipmentData.manufacturer, equipmentData.maker, '-'))}</td><td style="padding:8px 12px;color:var(--text3)">자산번호</td><td style="padding:8px 12px">${escapeHtml(pick(equipmentData.asset_no, '-'))}</td></tr>
           <tr style="border-bottom:1px solid var(--border)"><td style="padding:8px 12px;color:var(--text3)">제조일</td><td style="padding:8px 12px">${escapeHtml(formatDate(pick(equipmentData.mfg_date, equipmentData.install_date)))}</td><td style="padding:8px 12px;color:var(--text3)">평가등급</td><td style="padding:8px 12px"><span class="badge">${escapeHtml(pick(equipmentData.eval_grade, '-'))}</span></td></tr>
           <tr style="border-bottom:1px solid var(--border)"><td style="padding:8px 12px;color:var(--text3)">다음 점검일</td><td style="padding:8px 12px">${escapeHtml(formatDate(pick(equipmentData.next_inspection_date, '-')))}</td><td style="padding:8px 12px;color:var(--text3)">업데이트일</td><td style="padding:8px 12px">${escapeHtml(formatDate(pick(equipmentData.updated_at)))}</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:8px 12px;color:var(--text3)">자산 구분</td><td colspan="3" style="padding:8px 12px">${equipmentData.asset_owner && equipmentData.asset_owner !== 'undefined' ? `<span class="badge">${escapeHtml(equipmentData.asset_owner)}</span>` : '-'}</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:8px 12px;color:var(--text3)">설비 제작처</td><td style="padding:8px 12px">${escapeHtml(pick(equipmentData.vendor_name, '-'))}</td><td style="padding:8px 12px;color:var(--text3)">업체 담당</td><td style="padding:8px 12px">${escapeHtml(pick(equipmentData.vendor_contact, '-'))}</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:8px 12px;color:var(--text3)">업체 연락처</td><td colspan="3" style="padding:8px 12px">${escapeHtml(pick(equipmentData.vendor_phone, '-'))}</td></tr>
           <tr><td style="padding:8px 12px;color:var(--text3)">사양</td><td colspan="3" style="padding:8px 12px">${escapeHtml(pick(equipmentData.spec, equipmentData.specification, '-'))}</td></tr>
         </tbody>
       </table>`;
@@ -219,10 +222,13 @@ export function fillEquipForm(data = {}) {
   $('form-eq-old-code').value = pick(data.equip_code, data.code);
   $('form-eq-name').value = pick(data.equip_name, data.name);
   $('form-eq-maker').value = pick(data.maker, data.manufacturer);
+  ['name', 'contact', 'phone'].forEach((k) => { const v = data[`vendor_${k}`]; $(`form-eq-vendor-${k}`).value = v && v !== 'undefined' ? v : ''; });
   $('form-eq-loc').value = pick(data.location, data.install_loc);
   $('form-eq-manager').value = pick(data.manager, data.owner);
   $('form-eq-dept').value = pick(data.manager_dept, data.department, data.dept);
   $('form-eq-asset').value = pick(data.asset_no, data.asset_number);
+  const ownerEl = $('form-eq-asset-owner');
+  if (ownerEl) ownerEl.value = ['LSAT', 'AIT'].includes(data.asset_owner) ? data.asset_owner : '-';
   $('form-eq-date').value = formatDate(pick(data.mfg_date, data.install_date)).replace(/-/g, '-');
   $('form-eq-spec').value = pick(data.spec, data.specification);
   const statusEl = $('form-eq-status');
@@ -313,7 +319,7 @@ export async function saveEquipment() {
   const totalScore = calcTotalScore();
   const eval_grade = totalScore >= 50 ? 'A' : totalScore >= 40 ? 'B' : totalScore >= 20 ? 'C' : 'D';
   const payload = {
-    equip_code: $('form-eq-code').value.trim(), old_equip_code: $('form-eq-old-code').value.trim(), equip_name: $('form-eq-name').value.trim(), maker: $('form-eq-maker').value.trim(), manufacturer: $('form-eq-maker').value.trim(), location: $('form-eq-loc').value.trim(), manager: $('form-eq-manager').value.trim(), department: $('form-eq-dept').value.trim(), manager_dept: $('form-eq-dept').value.trim(), asset_no: $('form-eq-asset').value.trim(), install_date: $('form-eq-date').value, mfg_date: $('form-eq-date').value, spec: $('form-eq-spec').value.trim(), photo_url: $('form-eq-photo-url').value.trim(), status: $('form-eq-status')?.value || '정상', eval_total: totalScore, eval_grade,
+    equip_code: $('form-eq-code').value.trim(), old_equip_code: $('form-eq-old-code').value.trim(), equip_name: $('form-eq-name').value.trim(), maker: $('form-eq-maker').value.trim(), manufacturer: $('form-eq-maker').value.trim(), location: $('form-eq-loc').value.trim(), manager: $('form-eq-manager').value.trim(), department: $('form-eq-dept').value.trim(), manager_dept: $('form-eq-dept').value.trim(), asset_no: $('form-eq-asset').value.trim(), asset_owner: $('form-eq-asset-owner')?.value || '', vendor_name: $('form-eq-vendor-name').value.trim(), vendor_contact: $('form-eq-vendor-contact').value.trim(), vendor_phone: $('form-eq-vendor-phone').value.trim(), install_date: $('form-eq-date').value, mfg_date: $('form-eq-date').value, spec: $('form-eq-spec').value.trim(), photo_url: $('form-eq-photo-url').value.trim(), status: $('form-eq-status')?.value || '정상', eval_total: totalScore, eval_grade,
   };
   EVAL_KEYS.forEach((key) => { payload[`eval_${key.replace('-', '_')}`] = num($(`eval-${key}`).value); });
   if (!payload.equip_code || !payload.equip_name) { alert('설비코드와 설비명은 필수입니다.'); return; }
@@ -469,7 +475,7 @@ export function openHistorySlideOver(idx) {
   const existingDt = num(pick(row.downtime_min, 0));
   if (existingDt > 0) {
     soDowntime.value = existingDt;
-  } else if (reportDt) {
+  } else if (reportDt && pick(row.status, '') !== '완료') {
     const autoMin = Math.round((Date.now() - new Date(reportDt)) / 60000);
     soDowntime.value = autoMin > 0 ? autoMin : '';
   } else {

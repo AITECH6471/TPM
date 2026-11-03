@@ -995,6 +995,20 @@
     </div>
     <div class="form-row cols-2">
       <div class="form-group">
+        <label class="form-label">설비 제작처 (업체)</label>
+        <input class="form-control" id="form-eq-vendor-name" placeholder="업체명" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">설비 업체 담당</label>
+        <input class="form-control" id="form-eq-vendor-contact" placeholder="담당자명" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">업체 연락처</label>
+      <input class="form-control" id="form-eq-vendor-phone" placeholder="010 0000 0000" />
+    </div>
+    <div class="form-row cols-2">
+      <div class="form-group">
         <label class="form-label">제작사</label>
         <input class="form-control" id="form-eq-maker" placeholder="제작사명" />
       </div>
@@ -1030,6 +1044,14 @@
           <option value="정상">정상</option>
           <option value="고장" style="color:#d32f2f;font-weight:700">🔴 고장</option>
           <option value="유휴">유휴</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">자산 구분</label>
+        <select class="form-control" id="form-eq-asset-owner">
+          <option value="-">미지정</option>
+          <option value="LSAT">LSAT</option>
+          <option value="AIT">AIT</option>
         </select>
       </div>
     </div>
