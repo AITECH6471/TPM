@@ -163,7 +163,11 @@ export async function openEquipDetail(equipCode) {
         <td style="max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(pick(row.action_detail, '-'))}</td>
         <td>${escapeHtml(pick(row.status, '-'))}</td>
         <td>${escapeHtml(pick(row.reporter, '-'))}</td>
-      </tr>`).join('') || '<tr><td colspan="9">이력 없음</td></tr>';
+        <td style="white-space:nowrap" onclick="event.stopPropagation()">
+          <button class="btn btn-secondary btn-sm" onclick="openHistoryEdit(${idx})">수정</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteHistoryReport(${num(row.report_id)}, '${escapeHtml(equipCode)}')">삭제</button>
+        </td>
+      </tr>`).join('') || '<tr><td colspan="10">이력 없음</td></tr>';
     // 연결 스페어파트 로드
     try {
       const partsRes = await api(`equipment/spare-parts?equip_code=${encodeURIComponent(equipCode)}`);
@@ -423,12 +427,52 @@ export function removeEquipPhoto() {
   syncEquipPhotoPreview();
 }
 
-export function openHistorySlideOver(idx) {
+let historyMode = null; // null=조치입력, 'add'=이력 추가, 'edit'=이력 수정
+
+function setHistoryMode(mode) {
+  historyMode = mode;
+  document.getElementById('so-report-fields').style.display = mode ? 'grid' : 'none';
+  document.getElementById('so-edit-title').textContent = mode === 'add' ? '＋ 고장 이력 추가' : mode === 'edit' ? '✏️ 고장 이력 수정' : '✏️ 조치 입력 / 상태 변경';
+  document.getElementById('so-edit-section').style.display = mode ? 'block' : 'none';
+  document.getElementById('so-edit-toggle-btn').style.display = mode ? 'none' : '';
+}
+
+const toLocalInput = (v) => String(v || '').replace(' ', 'T').slice(0, 16);
+
+export function openHistoryEdit(idx) {
   const row = (state.equipHistory || [])[idx];
+  if (!row) return;
+  openHistorySlideOver(idx);
+  setHistoryMode('edit');
+  document.getElementById('so-r-dt').value = toLocalInput(pick(row.report_dt, ''));
+  document.getElementById('so-r-type').value = pick(row.report_type, '기타');
+  document.getElementById('so-r-symptom').value = pick(row.symptom, '');
+  document.getElementById('so-r-reporter').value = pick(row.reporter, '');
+}
+
+export function openHistoryAdd() {
+  const equipCode = pick(state.currentEquip?.equip_code, '');
+  if (!equipCode) { showToast('설비 정보를 찾을 수 없습니다.', 'error'); return; }
+  openHistorySlideOver(-1); // 빈 패널로 열기
+  document.getElementById('so-info').innerHTML = '';
+  document.getElementById('so-equip-code').value = equipCode;
+  setHistoryMode('add');
+  const now = new Date(); now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+  document.getElementById('so-r-dt').value = now.toISOString().slice(0, 16);
+  document.getElementById('so-r-type').value = '기계';
+  document.getElementById('so-r-symptom').value = '';
+  document.getElementById('so-r-reporter').value = '';
+  document.getElementById('so-status').value = '완료';
+  document.getElementById('so-downtime').value = '';
+}
+
+export function openHistorySlideOver(idx) {
+  const row = (state.equipHistory || [])[idx] || (idx === -1 ? {} : null);
   if (!row) return;
   const panel = document.getElementById('history-slideover');
   const bg = document.getElementById('history-slideover-bg');
   if (!panel || !bg) return;
+  setHistoryMode(null);
   const rp = normalizeDriveUrl(pick(row.report_photo, row.photo_url));
   const ap = normalizeDriveUrl(pick(row.action_photo, ''));
 
@@ -511,7 +555,33 @@ export function closeHistorySlideOver() {
   if (bg) bg.style.display = 'none';
 }
 
+async function saveHistoryForm() {
+  const symptom = document.getElementById('so-r-symptom').value.trim();
+  if (!symptom) { showToast('증상을 입력하세요.', 'error'); return; }
+  const equipCode = document.getElementById('so-equip-code').value;
+  const payload = {
+    equip_code: equipCode,
+    report_dt: document.getElementById('so-r-dt').value.replace('T', ' '),
+    report_type: document.getElementById('so-r-type').value,
+    symptom,
+    reporter: document.getElementById('so-r-reporter').value.trim(),
+    status: document.getElementById('so-status').value,
+    technician: document.getElementById('so-tech').value.trim(),
+    action_detail: document.getElementById('so-detail').value.trim(),
+    downtime_min: num(document.getElementById('so-downtime').value),
+  };
+  const isAdd = historyMode === 'add';
+  if (!isAdd) payload.report_id = num(document.getElementById('so-report-id').value);
+  try {
+    await api(isAdd ? 'report/history-add' : 'report/update', { method: 'POST', body: JSON.stringify(payload) });
+    closeHistorySlideOver();
+    showToast(isAdd ? '✅ 이력 추가 완료' : '✅ 이력 수정 완료');
+    await openEquipDetail(equipCode);
+  } catch (error) { showToast(`저장 실패: ${error.message}`, 'error'); }
+}
+
 export async function submitHistoryAction() {
+  if (historyMode) return saveHistoryForm();
   const reportId = num(document.getElementById('so-report-id').value);
   const equipCode = document.getElementById('so-equip-code').value;
   const status = document.getElementById('so-status').value;
@@ -560,8 +630,8 @@ export function showQR(code, name) {
   };
 }
 
-export async function deleteHistoryReport() {
-  const reportId = num(document.getElementById('so-report-id').value);
+export async function deleteHistoryReport(rowReportId, rowEquipCode) {
+  const reportId = num(rowReportId ?? document.getElementById('so-report-id').value);
   if (!reportId) { showToast('보고서 ID가 없습니다.', 'error'); return; }
   if (!confirm(`고장 이력 #${reportId}을 삭제하시겠습니까?\n조치 이력도 함께 삭제됩니다.`)) return;
   try {
@@ -569,7 +639,7 @@ export async function deleteHistoryReport() {
     showToast('✅ 삭제 완료');
     closeHistorySlideOver();
     // 설비 상세 모달 이력 테이블 갱신
-    const equipCode = document.getElementById('so-equip-code').value;
+    const equipCode = rowEquipCode || document.getElementById('so-equip-code').value;
     if (equipCode) await openEquipDetail(equipCode);
   } catch (error) { showToast(`삭제 실패: ${error.message}`, 'error'); }
 }

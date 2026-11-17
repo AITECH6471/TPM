@@ -925,7 +925,10 @@
         </div>
       </div>
       <div id="modal-equip-history-container" style="margin-top:20px;">
-        <div class="card-title" style="margin-bottom:10px">고장 이력</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <div class="card-title" style="margin:0">고장 이력</div>
+          <button class="btn btn-primary btn-sm" onclick="openHistoryAdd()">＋ 이력 추가</button>
+        </div>
         <div class="table-wrap">
           <table>
             <thead>
@@ -939,6 +942,7 @@
                 <th>조치내용</th>
                 <th>상태</th>
                 <th>신고자</th>
+                <th>작업</th>
               </tr>
             </thead>
             <tbody id="modal-equip-history">
@@ -1506,7 +1510,27 @@
     </div>
     <div id="so-edit-section" style="display:none">
       <hr style="border:none;border-top:1px solid var(--border,#e5e7eb);margin-bottom:20px" />
-      <div style="font-weight:800;font-size:14px;margin-bottom:14px">✏️ 조치 입력 / 상태 변경</div>
+      <div id="so-edit-title" style="font-weight:800;font-size:14px;margin-bottom:14px">✏️ 조치 입력 / 상태 변경</div>
+      <div id="so-report-fields" style="display:none;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+        <div>
+          <label style="font-size:12px;font-weight:600;color:var(--text2,#6b7280);display:block;margin-bottom:4px">접수일시</label>
+          <input class="form-control" id="so-r-dt" type="datetime-local" />
+        </div>
+        <div>
+          <label style="font-size:12px;font-weight:600;color:var(--text2,#6b7280);display:block;margin-bottom:4px">유형</label>
+          <select class="form-control" id="so-r-type">
+            <option>전기</option><option>기계</option><option>유압</option><option>공압</option><option>소프트웨어</option><option>기타</option>
+          </select>
+        </div>
+        <div style="grid-column:1/-1">
+          <label style="font-size:12px;font-weight:600;color:var(--text2,#6b7280);display:block;margin-bottom:4px">증상</label>
+          <input class="form-control" id="so-r-symptom" placeholder="예: 주축 모터 과열 경보" />
+        </div>
+        <div>
+          <label style="font-size:12px;font-weight:600;color:var(--text2,#6b7280);display:block;margin-bottom:4px">신고자</label>
+          <input class="form-control" id="so-r-reporter" />
+        </div>
+      </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
         <div>
           <label style="font-size:12px;font-weight:600;color:var(--text2,#6b7280);display:block;margin-bottom:4px">상태 변경</label>
