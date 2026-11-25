@@ -42,13 +42,13 @@ mkdir secrets
 ### 3. 사진 업로드 토큰
 `get_drive_token.py` 파일 위쪽 설명대로 `secrets\token.json` 을 만듭니다.
 
-### 4. 실행 (포트 8100)
-8000번은 같은 서버의 다른 시스템(aitsystem) 설정과 겹칩니다. 8100이 비어 있는지 먼저 확인합니다.
+### 4. 실행 (기본 포트 8200)
+서버의 다른 서비스가 쓰지 않는 포트를 고릅니다. 8200이 사용 중이면 `.env` 의 `API_PORT` 만 바꾸고, 아래 명령과 터널 주소의 번호도 같이 바꿉니다.
 ```powershell
-Get-NetTCPConnection -State Listen | Where-Object LocalPort -eq 8100   # 아무것도 안 나와야 함
+Get-NetTCPConnection -State Listen | Where-Object LocalPort -eq 8200   # 아무것도 안 나와야 함
 docker compose up -d --build
-curl.exe http://localhost:8100/api/health        # {"ok":true}
-curl.exe http://localhost:8100/api/settings/get  # DB 연결 확인
+curl.exe http://localhost:8200/api/health        # {"ok":true}
+curl.exe http://localhost:8200/api/settings/get  # DB 연결 확인
 ```
 컨테이너는 `host.docker.internal` 로 MySQL에 접속합니다. 접속이 거부되면 `docker-compose.yml` 의 `DB_HOST` 를 `192.168.1.147` 로 바꿉니다.
 
@@ -56,7 +56,7 @@ Docker 없이 실행:
 ```powershell
 pip install -r requirements.txt
 $env:GOOGLE_TOKEN_FILE="secrets\token.json"
-python -m uvicorn app.main:app --host 127.0.0.1 --port 8100
+python -m uvicorn app.main:app --host 127.0.0.1 --port 8200
 ```
 
 화면 업데이트는 `git pull` 로 반영됩니다. 서버 코드(`app/`)가 바뀌면 `docker compose up -d --build` 를 다시 실행합니다.
@@ -66,7 +66,7 @@ GitHub Pages는 `/api` 를 실행할 수 없으므로 `tpm.aitkorea.app` 을 서
 
 1. Cloudflare → `aitkorea.app` → DNS: `tpm` CNAME(→ aitech6471.github.io) 레코드 삭제
 2. 바로 이어서 Zero Trust → Networks → Tunnels → `aitech-app` → Public Hostname 추가
-   - `tpm.aitkorea.app` → `http://localhost:8100`
+   - `tpm.aitkorea.app` → `http://localhost:8200`
    - cloudflared가 컨테이너로 돌면 `localhost` 대신 `host.docker.internal` (기존 호스트 설정 방식을 따름)
 3. `https://tpm.aitkorea.app/api/health` 확인. 이 시점의 화면은 아직 n8n API를 호출하므로 그대로 동작합니다.
 4. API 주소 전환

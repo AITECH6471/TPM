@@ -4,15 +4,15 @@ services:
     container_name: tpm_api
     restart: unless-stopped
     ports:
-      - "8100:8000"
+      - "${API_PORT:-8200}:8000"
     env_file: .env
     environment:
       # 컨테이너 안에서 127.0.0.1은 컨테이너 자신이므로, 같은 PC의 MySQL은 host.docker.internal 로 접속
       DB_HOST: host.docker.internal
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
       STATIC_DIR: /site
       GOOGLE_TOKEN_FILE: /secrets/token.json
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       # 화면 파일(저장소 루트). git pull 하면 바로 반영된다.
       - ..:/site:ro
