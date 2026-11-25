@@ -2542,38 +2542,14 @@
       checkConn();
       loadParts();
 
-      // 탭별 폴링 주기 (ms) — 0이면 폴링 안 함
-      const POLL_INTERVALS = {
-        "act": 10000,
-        "lkp": 15000,
-        "reg": 0,
-        "set": 0,
-      };
-
       // 조치 입력 오버레이 열려있는지 확인 (편집 중 갱신 방지)
       function isModalOpen() {
         return document.getElementById("actOv")?.classList.contains("on") || false;
       }
 
-      let _lastPoll = 0;
-
-      // 5초마다 체크 — 탭별 주기 조건 충족 시에만 실제 갱신
-      setInterval(() => {
-        if (document.hidden || isModalOpen()) return;
-        const id = getActivePage();
-        const interval = POLL_INTERVALS[id] ?? 30000;
-        if (!interval) return;
-        if (Date.now() - _lastPoll < interval) return;
-        _lastPoll = Date.now();
-        refreshActivePage();
-      }, 5000);
-
       // 브라우저 탭 복귀 시 즉시 갱신 (오버레이 없을 때만)
       document.addEventListener("visibilitychange", () => {
-        if (!document.hidden && !isModalOpen()) {
-          _lastPoll = 0;
-          refreshActivePage();
-        }
+        if (!document.hidden && !isModalOpen()) refreshActivePage();
       });
     }
 
