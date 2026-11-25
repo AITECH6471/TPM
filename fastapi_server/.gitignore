@@ -1,0 +1,7 @@
+.env
+token.json
+secrets/
+client_secret*.json
+__pycache__/
+.venv/
+.pytest_cache/
