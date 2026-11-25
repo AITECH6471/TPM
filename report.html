@@ -2476,7 +2476,7 @@
               ${r.action_detail ? `<div style="font-size:12px;color:var(--text2);margin-top:3px">📋 ${r.action_detail}</div>` : ''}
               <div style="font-size:11px;color:var(--text3);margin-top:3px">${r.report_type||''} ${r.reporter ? '· 신고: '+r.reporter : ''} ${r.technician ? '· 조치: '+r.technician : ''}</div>
             </div>`;
-        }).join('') : `<div style="padding:16px 0;text-align:center;color:var(--text3)">고장 이력 없음</div>`;
+        }).join('') : `<div style="padding:16px 0;text-align:center;color:var(--text3)">수리 &amp; 개선 &amp; 점검 이력 없음</div>`;
 
         area.innerHTML = `
           <div style="margin-bottom:12px">
@@ -2488,7 +2488,7 @@
             <div style="font-size:12px;color:var(--text3);margin-top:4px">📍 ${eq.location || eq.install_loc || '—'} &nbsp;·&nbsp; 담당: ${eq.manager || eq.owner || '—'}</div>
           </div>
           <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px">
-            <div style="font-size:13px;font-weight:700;margin-bottom:8px">📋 고장 이력 (${rows.length}건)</div>
+            <div style="font-size:13px;font-weight:700;margin-bottom:8px">📋 수리 &amp; 개선 &amp; 점검 이력 (${rows.length}건)</div>
             ${histHtml}
           </div>`;
       } catch (err) {

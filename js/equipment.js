@@ -432,7 +432,7 @@ let historyMode = null; // null=조치입력, 'add'=이력 추가, 'edit'=이력
 function setHistoryMode(mode) {
   historyMode = mode;
   document.getElementById('so-report-fields').style.display = mode ? 'grid' : 'none';
-  document.getElementById('so-edit-title').textContent = mode === 'add' ? '＋ 고장 이력 추가' : mode === 'edit' ? '✏️ 고장 이력 수정' : '✏️ 조치 입력 / 상태 변경';
+  document.getElementById('so-edit-title').textContent = mode === 'add' ? '＋ 수리 & 개선 & 점검 이력 추가' : mode === 'edit' ? '✏️ 수리 & 개선 & 점검 이력 수정' : '✏️ 조치 입력 / 상태 변경';
   document.getElementById('so-edit-section').style.display = mode ? 'block' : 'none';
   document.getElementById('so-edit-toggle-btn').style.display = mode ? 'none' : '';
 }
@@ -633,7 +633,7 @@ export function showQR(code, name) {
 export async function deleteHistoryReport(rowReportId, rowEquipCode) {
   const reportId = num(rowReportId ?? document.getElementById('so-report-id').value);
   if (!reportId) { showToast('보고서 ID가 없습니다.', 'error'); return; }
-  if (!confirm(`고장 이력 #${reportId}을 삭제하시겠습니까?\n조치 이력도 함께 삭제됩니다.`)) return;
+  if (!confirm(`수리 & 개선 & 점검 이력 #${reportId}을 삭제하시겠습니까?\n조치 이력도 함께 삭제됩니다.`)) return;
   try {
     await api('report/delete', { method: 'POST', body: JSON.stringify({ report_id: reportId }) });
     showToast('✅ 삭제 완료');
