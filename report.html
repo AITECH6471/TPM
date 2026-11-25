@@ -2616,9 +2616,7 @@
         if (action === 'on') {
           const perm = await Notification.requestPermission();
           if (perm !== 'granted') throw new Error('알림 권한이 거부되었습니다.');
-          const swPath = location.hostname === 'aitmt6471.github.io' ? '/TPM/sw.js' : '/sw.js';
-          const scope  = location.hostname === 'aitmt6471.github.io' ? '/TPM/' : '/';
-          const reg = await navigator.serviceWorker.register(swPath, { scope });
+          const reg = await navigator.serviceWorker.register('sw.js');
           await navigator.serviceWorker.ready;
           const existing = await reg.pushManager.getSubscription();
           if (existing) await existing.unsubscribe();

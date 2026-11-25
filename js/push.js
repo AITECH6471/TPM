@@ -29,12 +29,8 @@ export function isIOSBrowser() {
 
 // Service Worker 등록
 async function registerSW() {
-  // GitHub Pages: scope /TPM/, 로컬: scope /
-  const swPath = location.hostname === 'aitmt6471.github.io'
-    ? '/TPM/sw.js' : '/sw.js';
-  const scope = location.hostname === 'aitmt6471.github.io'
-    ? '/TPM/' : '/';
-  return navigator.serviceWorker.register(swPath, { scope });
+  // 상대경로: 어느 주소에 배포해도 sw.js가 있는 폴더가 scope가 된다
+  return navigator.serviceWorker.register('sw.js');
 }
 
 // 현재 구독 상태 반환 ('denied' | 'subscribed' | 'unsubscribed' | 'unsupported')
