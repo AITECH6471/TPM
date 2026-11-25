@@ -15,7 +15,7 @@ self.addEventListener('activate', event => {
 
 // ── 푸시 수신 ────────────────────────────────────────────────
 self.addEventListener('push', event => {
-  let data = { title: '🚨 고장 접수 — AIT TPM', body: '새 고장이 접수되었습니다. 확인해주세요.', url: '/TPM/report.html' };
+  let data = { title: '🚨 고장 접수 — AIT TPM', body: '새 고장이 접수되었습니다. 확인해주세요.', url: 'report.html' };
   try {
     if (event.data) data = { ...data, ...event.data.json() };
   } catch (e) {
@@ -24,12 +24,12 @@ self.addEventListener('push', event => {
 
   const options = {
     body:    data.body,
-    icon:    '/TPM/ait-logo.png',
-    badge:   '/TPM/ait-logo.png',
+    icon:    'ait-logo.png',
+    badge:   'ait-logo.png',
     vibrate: [200, 100, 200],
     tag:     data.tag || 'ait-tpm',
     renotify: true,
-    data:    { url: data.url || '/TPM/report.html' },
+    data:    { url: data.url || 'report.html' },
     actions: [
       { action: 'open',    title: '바로 열기' },
       { action: 'dismiss', title: '닫기' }
@@ -46,13 +46,13 @@ self.addEventListener('notificationclick', event => {
   event.notification.close();
   if (event.action === 'dismiss') return;
 
-  const targetUrl = event.notification.data?.url || '/TPM/report.html';
+  const targetUrl = event.notification.data?.url || 'report.html';
 
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then(clientList => {
       // 이미 열린 탭이 있으면 포커스
       for (const client of clientList) {
-        if (client.url.includes('/TPM') && 'focus' in client) {
+        if (client.url.startsWith(self.registration.scope) && 'focus' in client) {
           return client.focus();
         }
       }

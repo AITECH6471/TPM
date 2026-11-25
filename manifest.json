@@ -2,15 +2,15 @@
   "name": "AIT TPM 현장",
   "short_name": "AIT TPM",
   "description": "설비 고장 접수 및 조치 관리",
-  "start_url": "/TPM/report.html",
-  "scope": "/TPM/",
+  "start_url": "report.html",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#0f172a",
   "theme_color": "#1d4ed8",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "/TPM/ait-logo.png",
+      "src": "ait-logo.png",
       "sizes": "any",
       "type": "image/png",
       "purpose": "any"
