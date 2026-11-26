@@ -1112,9 +1112,9 @@
         <div class="card-b">
           <div class="fg">
             <label class="fl">Base URL</label>
-            <input class="fc" id="sUrl" placeholder="https://xxxx.ngrok.io/webhook" />
+            <input class="fc" id="sUrl" placeholder="https://tpm.aitkorea.app/api" />
             <div style="font-size:10px;color:var(--text3);margin-top:4px">
-              예: https://n8n.aitkorea.app/webhook
+              예: https://tpm.aitkorea.app/api
             </div>
           </div>
 
@@ -1297,7 +1297,10 @@
   </div>
 
   <script>
-    let BASE = (localStorage.getItem("baseUrl") || "").replace(/^.*ngrok.*$/, "") || "https://n8n.aitkorea.app/webhook";
+    // API는 FastAPI(https://tpm.aitkorea.app/api). 예전 n8n/ngrok 주소가 브라우저에 남아 있어도 무시한다.
+    const cleanBase = (v) => { v = String(v || "").trim().replace(/\/+$/, ""); return /ngrok|n8n\.aitkorea\.app/i.test(v) ? "" : v; };
+    let BASE = cleanBase(localStorage.getItem("baseUrl")) ||
+      (location.hostname === "tpm.aitkorea.app" ? `${location.origin}/api` : "https://tpm.aitkorea.app/api");
 
     function normalizeDriveUrl(url) {
       const src = String(url ?? '').trim();

@@ -1,6 +1,6 @@
 ﻿export const state = {
   currentPage: 'page-dashboard',
-  baseUrl: (localStorage.getItem('baseUrl') || '').replace(/^.*ngrok.*$/, '') || 'https://n8n.aitkorea.app/webhook',
+  baseUrl: cleanBaseUrl(localStorage.getItem('baseUrl')) || defaultBaseUrl(),
   equipment: [],
   reports: [],
   parts: [],
@@ -31,6 +31,9 @@ export const CACHE_KEYS = {
   stats: 'ait_cache_stats',
 };
 
+// API는 FastAPI(https://tpm.aitkorea.app/api). 예전 n8n/ngrok 주소는 브라우저·DB에 남아 있어도 무시한다.
+export function defaultBaseUrl() { return location.hostname === 'tpm.aitkorea.app' ? `${location.origin}/api` : 'https://tpm.aitkorea.app/api'; }
+export function cleanBaseUrl(value) { const v = String(value ?? '').trim().replace(/\/+$/, ''); return /ngrok|n8n\.aitkorea\.app/i.test(v) ? '' : v; }
 export function isPlanned(value) { return ['P', 'D', '1', 1, true, 'Y'].includes(value); }
 export function $(id) { return document.getElementById(id); }
 export function escapeHtml(value) { return String(value ?? '').replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch])); }

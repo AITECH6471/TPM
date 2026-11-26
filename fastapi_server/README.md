@@ -21,45 +21,50 @@ https://tpm.aitkorea.app/api/…  → API → MySQL
 - 푸시: n8n의 VAPID 키로 서명·암호화 되는 것까지 오프라인 확인, 실제 발송은 미시험
 - 사진 업로드: Google Drive 토큰 설정 전에는 501 반환, 미시험
 
-## 서버 PC(192.168.1.147) 설치
+## 서버 PC(192.168.1.147) 운영 (2026-11-26 설치 완료, Docker 없이 네이티브)
+aitsystem(8000)·ait-pp(8100)와 같은 방식입니다.
 
-### 1. 코드 받기
-```powershell
-git clone https://github.com/AITECH6471/TPM.git C:\tpm
-cd C:\tpm\fastapi_server
-copy .env.example .env
-mkdir secrets
-```
+| 항목 | 위치 |
+|---|---|
+| 코드 | `C:\tpm` (이 저장소, branch main) |
+| 설정 | `C:\tpm\fastapi_server\.env` (커밋 금지) |
+| 파이썬 | `C:\tpm\.venv` (Python 3.12) |
+| 실행 | 작업 스케줄러 `AITECH-TPM` → `C:\adms\run_tpm.bat` → uvicorn `127.0.0.1:8200` (AITmanager 로그온 시 시작) |
+| 로그 | `C:\adms\logs\tpm.log` (직전 실행분 `tpm.prev.log`) |
+| 자동배포 | 작업 스케줄러 `AITECH-TPM-AutoDeploy`(2분마다) → `C:\adms\autodeploy_tpm.ps1`: main에 새 커밋이 있으면 pull, requirements.txt가 바뀌면 pip install, `fastapi_server/` 가 바뀌면 재시작. 로그 `C:\adms\autodeploy_tpm.log`, 실패 시 디스코드 알림 |
 
-### 2. `.env` 채우기 (커밋 금지)
+화면 파일(index.html, js/…)은 `C:\tpm` 에서 바로 제공하므로 push만 하면 2분 안에 반영됩니다.
+
+### `.env` 항목
 | 항목 | 값 |
 |---|---|
 | `DB_PASSWORD` | MySQL 비밀번호 |
-| `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY` | n8n `CODE_send_push_report` 노드의 값 그대로 (그래야 같은 키로 발송) |
+| `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY` | n8n `CODE_send_push_report` 노드의 값 그대로 (그래야 기존 구독에 같은 키로 발송) |
 | `DRIVE_FOLDER_EQUIP`, `DRIVE_FOLDER_SUB` | n8n `Drive_upload`, `Drive_upload_photo_upload_sub` 노드의 folderId |
 | `DRIVE_FOLDER_PARTS` | n8n `Drive_upload_photo_upload_parts` 노드의 folderId |
+| `DISCORD_BREAKDOWN_WEBHOOK_URL` | 고장접수 알림 채널의 디스코드 웹훅 URL (비우면 알림만 건너뜀) |
 
-### 3. 사진 업로드 토큰
-`get_drive_token.py` 파일 위쪽 설명대로 `secrets\token.json` 을 만듭니다.
+`.env` 를 바꾼 뒤에는 재시작해야 반영됩니다: `Stop-ScheduledTask AITECH-TPM; Start-ScheduledTask AITECH-TPM`
 
-### 4. 실행 (기본 포트 8200)
-서버의 다른 서비스가 쓰지 않는 포트를 고릅니다. 8200이 사용 중이면 `.env` 의 `API_PORT` 만 바꾸고, 아래 명령과 터널 주소의 번호도 같이 바꿉니다.
+### 사진 업로드 토큰
+`get_drive_token.py` 파일 위쪽 설명대로 `secrets\token.json` 을 만듭니다(없으면 사진 업로드만 501).
+
+### 확인
 ```powershell
-Get-NetTCPConnection -State Listen | Where-Object LocalPort -eq 8200   # 아무것도 안 나와야 함
-docker compose up -d --build
-curl.exe http://localhost:8200/api/health        # {"ok":true}
-curl.exe http://localhost:8200/api/settings/get  # DB 연결 확인
-```
-컨테이너는 `host.docker.internal` 로 MySQL에 접속합니다. 접속이 거부되면 `docker-compose.yml` 의 `DB_HOST` 를 `192.168.1.147` 로 바꿉니다.
-
-Docker 없이 실행:
-```powershell
-pip install -r requirements.txt
-$env:GOOGLE_TOKEN_FILE="secrets\token.json"
-python -m uvicorn app.main:app --host 127.0.0.1 --port 8200
+curl.exe http://127.0.0.1:8200/api/health        # {"ok":true}
+curl.exe http://127.0.0.1:8200/api/settings/get  # DB 연결 확인
 ```
 
-화면 업데이트는 `git pull` 로 반영됩니다. 서버 코드(`app/`)가 바뀌면 `docker compose up -d --build` 를 다시 실행합니다.
+### 수동 실행 (개발용)
+```powershell
+cd C:\tpm\fastapi_server
+..\.venv\Scripts\python.exe -m uvicorn app.main:app --host 127.0.0.1 --port 8200
+```
+
+## 디스코드 고장접수 알림
+`POST /report/create` 로 접수되면 저장 후 백그라운드로 디스코드 웹훅에 임베드를 보냅니다
+(설비명·코드, 위치/라인, 유형, 우선순위, 라인 영향, 접수자, 증상, 사진). 라인정지·긴급은 빨강, 높음은 주황, 나머지는 노랑.
+전송 실패는 `tpm.log` 에 경고만 남기고 접수에는 영향이 없습니다. 웹 푸시 알림도 그대로 함께 나갑니다.
 
 ## 도메인 전환 (서버 확인이 끝난 뒤)
 GitHub Pages는 `/api` 를 실행할 수 없으므로 `tpm.aitkorea.app` 을 서버의 Cloudflare Tunnel로 옮깁니다.
@@ -67,7 +72,6 @@ GitHub Pages는 `/api` 를 실행할 수 없으므로 `tpm.aitkorea.app` 을 서
 1. Cloudflare → `aitkorea.app` → DNS: `tpm` CNAME(→ aitech6471.github.io) 레코드 삭제
 2. 바로 이어서 Zero Trust → Networks → Tunnels → `aitech-app` → Public Hostname 추가
    - `tpm.aitkorea.app` → `http://localhost:8200`
-   - cloudflared가 컨테이너로 돌면 `localhost` 대신 `host.docker.internal` (기존 호스트 설정 방식을 따름)
 3. `https://tpm.aitkorea.app/api/health` 확인. 이 시점의 화면은 아직 n8n API를 호출하므로 그대로 동작합니다.
 4. API 주소 전환
    - `js/core.js` 의 `baseUrl`, `report.html` 의 `BASE`, `index.html` 설정 칸 기본값 → `https://tpm.aitkorea.app/api`

@@ -144,3 +144,47 @@ def test_cors_preflight():
     r = TestClient(app).options("/report/list", headers={
         "Origin": "https://tpm.aitkorea.app", "Access-Control-Request-Method": "GET"})
     assert r.headers["access-control-allow-origin"] == "https://tpm.aitkorea.app"
+
+
+def test_report_create_sends_discord(sqllog, monkeypatch):
+    """고장접수 시 디스코드 웹훅으로 한 번 전송한다(웹훅 URL이 있을 때만)."""
+    from app import discord
+    from app.config import settings
+    sent = []
+    monkeypatch.setattr(settings, "discord_breakdown_webhook_url", "https://discord.test/hook")
+    monkeypatch.setattr(discord, "post", lambda payload, url=None: sent.append(payload) or True)
+    monkeypatch.setattr("app.routers.reports.send_all", lambda *a, **k: None)
+    TestClient(app).post("/api/report/create", json={
+        "equip_code": "A-1", "priority": "보통", "line_impact": "라인정지", "symptom": "누유", "reporter": "홍길동"})
+    assert len(sent) == 1
+    e = sent[0]["embeds"][0]
+    assert "#7" in e["title"] and "라인정지" in e["title"] and e["color"] == 0xE53935
+    vals = {f["name"]: f["value"] for f in e["fields"]}
+    assert vals["위치/라인"] == "L3" and "CNC" in vals["설비"] and vals["증상"] == "누유"
+
+
+def test_discord_skipped_without_url(monkeypatch):
+    from app import discord
+    from app.config import settings
+    monkeypatch.setattr(settings, "discord_breakdown_webhook_url", "")
+    called = []
+    monkeypatch.setattr(discord, "post", lambda *a, **k: called.append(1))
+    assert discord.notify_breakdown(1, {"equip_code": "A-1"}, {}) is False and not called
+
+
+def test_discord_sets_user_agent(monkeypatch):
+    """디스코드는 urllib 기본 User-Agent를 403으로 막는다."""
+    from app import discord
+    seen = {}
+
+    class Res:
+        status = 204
+        def __enter__(self): return self
+        def __exit__(self, *a): return False
+
+    def fake_open(req, timeout=None):
+        seen["ua"] = req.get_header("User-agent")
+        return Res()
+    monkeypatch.setattr(discord.urllib.request, "urlopen", fake_open)
+    assert discord.post({"content": "x"}, url="https://discord.test/hook") is True
+    assert seen["ua"] and "urllib" not in seen["ua"].lower()

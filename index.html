@@ -563,11 +563,11 @@
         </div>
         <div class="card-body">
           <div class="settings-section">
-            <div class="card-title" style="margin-bottom:12px">n8n Webhook 연결</div>
+            <div class="card-title" style="margin-bottom:12px">API 서버 연결</div>
             <div class="form-group" style="margin-bottom:12px">
               <label class="form-label">Base URL</label>
-              <input class="form-control" id="cfg-base-url" placeholder="https://xxxx.ngrok.io/webhook">
-              <span style="font-size:11px;color:var(--text3);margin-top:4px"> 예: https://n8n.aitkorea.app/webhook </span>
+              <input class="form-control" id="cfg-base-url" placeholder="https://tpm.aitkorea.app/api">
+              <span style="font-size:11px;color:var(--text3);margin-top:4px"> 예: https://tpm.aitkorea.app/api </span>
             </div>
             <div style="display:flex;gap:10px">
               <button class="btn btn-primary" onclick="saveConfig()">💾 저장</button>
@@ -577,8 +577,8 @@
             </div>
           </div>
           <div class="settings-section" style="margin-top:24px">
-            <div class="card-title" style="margin-bottom:12px">이메일 / Slack 알림</div>
-            <p style="font-size:12px;color:var(--text3);line-height:1.8"> 알림 설정은 n8n 워크플로우 <strong>설비 관리시스템 — API 통합 허브</strong>에서 직접 수정하세요.<br /> • 이메일: <code>이메일긴급</code>, <code>이메일일반</code> 노드 → SMTP credential 연결<br /> • Slack: <code>Slack알림</code> 노드 → disabled 해제 + Slack credential 연결<br /> • Google Drive: <code>Drive업로드</code> 노드 → folderId 입력 </p>
+            <div class="card-title" style="margin-bottom:12px">알림 / 사진 저장</div>
+            <p style="font-size:12px;color:var(--text3);line-height:1.8"> 아래 설정은 서버 PC의 <code>C:\tpm\fastapi_server\.env</code> 에서 수정합니다(수정 후 서버 재시작).<br /> • 고장접수 디스코드 알림: <code>DISCORD_BREAKDOWN_WEBHOOK_URL</code><br /> • 웹 푸시: <code>VAPID_PUBLIC_KEY</code>, <code>VAPID_PRIVATE_KEY</code><br /> • Google Drive 사진 폴더: <code>DRIVE_FOLDER_EQUIP</code>, <code>DRIVE_FOLDER_SUB</code>, <code>DRIVE_FOLDER_PARTS</code> </p>
           </div>
         </div>
       </div>

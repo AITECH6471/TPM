@@ -1,6 +1,7 @@
 from fastapi import APIRouter, BackgroundTasks, Body
 
 from ..db import q, tx, x
+from ..discord import notify_breakdown
 from ..push import send_all
 from ..util import nz, num, ok, s
 
@@ -43,6 +44,7 @@ def report_create(bg: BackgroundTasks, b: dict = Body(default_factory=dict)):
         cur.execute("UPDATE equipment SET status='접수' WHERE equip_code=%s", (code,))
         cur.execute("SELECT location, equip_name FROM equipment WHERE equip_code=%s", (code,))
         info = cur.fetchone() or {}
+    bg.add_task(notify_breakdown, report_id, dict(b), dict(info))
     bg.add_task(send_all, "🚨 신규 안돈 접수",
                 f"라인: {info.get('location') or '-'} | 설비: {code or '-'} | 우선순위: {b.get('priority') or '-'}\n{b.get('symptom') or '-'}")
     return {"success": True, "report_id": report_id, "data": [{"report_id": report_id, **info}]}

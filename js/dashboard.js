@@ -1,4 +1,4 @@
-﻿import { state, CACHE_KEYS, EVAL_KEYS, $, num, pick, getRows, saveCache, loadCache, escapeHtml, formatDate, setConnection, apiFirst, showToast, hoursSince } from './core.js';
+﻿import { state, CACHE_KEYS, EVAL_KEYS, $, num, pick, getRows, saveCache, loadCache, escapeHtml, formatDate, setConnection, apiFirst, showToast, hoursSince, cleanBaseUrl } from './core.js';
 import { renderChart, renderMultiLineChart } from './ui.js';
 
 export async function checkConn() {
@@ -14,7 +14,7 @@ export async function checkConn() {
 
 export function saveConfig() {
   const input = $('cfg-base-url');
-  state.baseUrl = (input?.value || '').trim().replace(/\/$/, '') || state.baseUrl;
+  state.baseUrl = cleanBaseUrl(input?.value) || state.baseUrl;
   localStorage.setItem('baseUrl', state.baseUrl);
   showToast(`저장됨: ${state.baseUrl}`);
   apiFirst(['settings/save'], { method: 'POST', body: JSON.stringify({ base_url: state.baseUrl, key: 'base_url', value: state.baseUrl }) }).catch(() => {});
@@ -30,9 +30,9 @@ export async function loadRemoteSettings() {
   try {
     const response = await apiFirst(['settings/get']);
     const data = response.data || response;
-    const baseUrl = pick(data.base_url, data.value, data.webhook_url);
+    const baseUrl = cleanBaseUrl(pick(data.base_url, data.value, data.webhook_url));
     if (baseUrl) {
-      state.baseUrl = String(baseUrl).replace(/\/$/, '');
+      state.baseUrl = baseUrl;
       localStorage.setItem('baseUrl', state.baseUrl);
     }
   } catch {}

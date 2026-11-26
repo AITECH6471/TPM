@@ -19,6 +19,9 @@ class Settings(BaseSettings):
     # 화면 파일 위치. 비우면 이 폴더의 상위(저장소 루트)
     static_dir: str = ""
 
+    # 고장접수(report/create) 디스코드 알림. 비우면 알림만 건너뜀
+    discord_breakdown_webhook_url: str = ""
+
     google_token_file: str = ""
     drive_folder_equip: str = ""
     drive_folder_parts: str = ""
