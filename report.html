@@ -12,9 +12,7 @@
   <meta name="theme-color" content="#1d4ed8" />
   <link rel="manifest" href="manifest.json" />
   <link rel="apple-touch-icon" href="ait-logo.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
 
   <style>
     *,
@@ -26,27 +24,29 @@
     }
 
     :root {
-      --bg: #f4f6fb;
+      /* pp.aitkorea.app과 같은 색. 현장용이라 글자·버튼 크기와 6px 모서리는 유지 */
+      --bg: #f8f8fa;
       --surface: #ffffff;
-      --surface2: #f8faff;
-      --border: #e2e8f0;
-      --primary: #3366ff;
-      --primary-light: #edf3ff;
-      --green: #16a34a;
-      --green-light: #edfdf3;
-      --red: #ef4444;
-      --red-light: #fff1f2;
-      --orange: #f97316;
-      --orange-light: #fff7ed;
-      --yellow: #f59e0b;
-      --yellow-light: #fff8e7;
-      --text: #111827;
-      --text2: #4b5563;
-      --text3: #9ca3af;
-      --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
-      --shadow-sm: 0 3px 10px rgba(15, 23, 42, 0.06);
-      --r: 18px;
-      --rs: 12px;
+      --surface2: #f8f8fa;
+      --border: #dde1e8;
+      --primary: #2563eb;
+      --primary-light: #eaf1fe;
+      --green: #189a4a;
+      --green-light: #e6f5ec;
+      --red: #d3403f;
+      --red-light: #fbe9e9;
+      --orange: #c75a1f;
+      --orange-light: #fdebe1;
+      --yellow: #d98c11;
+      --yellow-light: #fdf3e1;
+      --text: #0c1016;
+      --text2: #3c4254;
+      --text3: #6b6b74;
+      --shadow: none;
+      --shadow-md: 0 8px 28px rgba(15, 23, 42, 0.16);
+      --shadow-sm: none;
+      --r: 6px;
+      --rs: 6px;
     }
 
     html,
@@ -56,8 +56,13 @@
       background: var(--bg);
     }
 
+    /* 목록을 아래로 당겨도 브라우저가 페이지를 새로고침하지 않게 */
+    html, body, .body, .sheet {
+      overscroll-behavior-y: contain;
+    }
+
     body {
-      font-family: "Inter", sans-serif;
+      font-family: 'Pretendard Variable', Pretendard, 'Malgun Gothic', -apple-system, sans-serif;
       color: var(--text);
       font-size: 14px;
       display: flex;
@@ -66,12 +71,11 @@
       margin: 0 auto;
       min-height: 100%;
       background: var(--surface);
-      box-shadow: 0 0 32px rgba(0, 0, 0, 0.08);
+      border-inline: 1px solid var(--border);
     }
 
     .hd {
-      background: rgba(255, 255, 255, 0.92);
-      backdrop-filter: blur(10px);
+      background: var(--surface);
       border-bottom: 1px solid var(--border);
       flex-shrink: 0;
       padding: 12px 16px 0;
@@ -92,9 +96,8 @@
       align-items: center;
       justify-content: center;
       font-size: 22px;
-      font-weight: 800;
-      color: var(--primary);
-      letter-spacing: -0.4px;
+      font-weight: 700;
+      color: #0f172a;
     }
 
     .hd-sub {
@@ -160,7 +163,7 @@
       overflow-y: auto;
       padding: 14px;
       -webkit-overflow-scrolling: touch;
-      background: linear-gradient(180deg, #fbfcff 0%, #f4f7fb 100%);
+      background: var(--bg);
     }
 
     .page {
@@ -183,9 +186,9 @@
     .card-h {
       padding: 12px 15px;
       border-bottom: 1px solid var(--border);
-      background: #fbfcff;
-      font-size: 12px;
-      font-weight: 800;
+      background: #f3f3f5;
+      font-size: 13px;
+      font-weight: 700;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -215,7 +218,7 @@
     .fc {
       width: 100%;
       padding: 11px 12px;
-      background: var(--surface2);
+      background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--rs);
       font-size: 13px;
@@ -229,7 +232,6 @@
     .fc:focus {
       border-color: var(--primary);
       background: var(--surface);
-      box-shadow: 0 0 0 4px rgba(51, 102, 255, 0.1);
     }
 
     .fc::placeholder {
@@ -261,15 +263,14 @@
     }
 
     .chip:hover {
-      transform: translateY(-1px);
+      border-color: var(--primary);
     }
 
     .chip.c-on {
       border-color: var(--primary);
       background: var(--primary-light);
       color: var(--primary);
-      box-shadow: inset 0 0 0 1px rgba(51, 102, 255, 0.08);
-    }
+          }
 
     .chip.c-긴급.c-on,
     .chip.c-라인정지.c-on {
@@ -353,7 +354,7 @@
       width: 100%;
       max-height: 180px;
       object-fit: cover;
-      border-radius: 10px;
+      border-radius: var(--rs);
       margin-top: 10px;
       display: none;
       border: 1px solid var(--border);
@@ -363,7 +364,7 @@
       margin-top: 8px;
       font-size: 11px;
       padding: 6px 10px;
-      border-radius: 8px;
+      border-radius: var(--rs);
       display: none;
       font-weight: 600;
     }
@@ -389,9 +390,9 @@
     .btn {
       width: 100%;
       padding: 14px;
-      border-radius: 13px;
+      border-radius: var(--rs);
       font-size: 14px;
-      font-weight: 800;
+      font-weight: 700;
       font-family: inherit;
       cursor: pointer;
       border: none;
@@ -399,9 +400,8 @@
     }
 
     .btn-p {
-      background: linear-gradient(135deg, var(--primary), #4b7cff);
+      background: var(--primary);
       color: #fff;
-      box-shadow: 0 10px 20px rgba(51, 102, 255, 0.22);
     }
 
     .btn-p:active {
@@ -424,7 +424,7 @@
       width: auto;
       padding: 8px 14px;
       font-size: 12px;
-      border-radius: 10px;
+      border-radius: var(--rs);
     }
 
     .ok-screen {
@@ -638,7 +638,8 @@
     .ms {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 14px;
+      border-left: 3px solid var(--primary);
+      border-radius: var(--r);
       padding: 12px 8px;
       text-align: center;
       box-shadow: var(--shadow-sm);
@@ -686,7 +687,7 @@
 
     .sheet {
       background: var(--surface);
-      border-radius: 22px;
+      border-radius: 8px;
       width: 100%;
       max-width: 520px;
       max-height: 92vh;
@@ -734,9 +735,9 @@
     }
 
     .equip-lock {
-      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
-      border: 1px solid #dbe6ff;
-      border-radius: 14px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
       padding: 14px;
       margin-bottom: 12px;
       display: none;
@@ -750,7 +751,7 @@
       width: 100%;
       max-width: 420px;
       height: 420px;
-      border-radius: 18px;
+      border-radius: var(--r);
       object-fit: cover;
       border: 1px solid var(--border);
       background: var(--surface);
@@ -781,7 +782,7 @@
       font-size: 11px;
       font-weight: 800;
       background: var(--surface);
-      border: 1px solid #dbe6ff;
+      border: 1px solid var(--border);
       color: var(--primary);
       margin-top: 6px;
     }
@@ -791,7 +792,7 @@
       margin-top: 10px;
       padding: 14px;
       background: var(--primary-light);
-      border-radius: 14px;
+      border-radius: var(--r);
       font-size: 12px;
       flex-direction: column;
       align-items: center;
@@ -803,7 +804,7 @@
       width: 100%;
       max-width: 420px;
       height: 420px;
-      border-radius: 18px;
+      border-radius: var(--r);
       object-fit: cover;
       display: none;
       border: 1px solid var(--border);
@@ -822,7 +823,7 @@
       text-align: left;
       border: 1px solid var(--border);
       background: var(--surface2);
-      border-radius: 12px;
+      border-radius: var(--rs);
       padding: 10px 12px;
       cursor: pointer;
       transition: 0.15s ease;
@@ -1026,8 +1027,8 @@
 
       <!-- 연/월 필터 -->
       <div style="display:flex;gap:8px;padding:0 0 10px;">
-        <select class="fc" id="actYear" onchange="renderAct()" style="flex:1;font-size:12px;padding:7px 10px;border-radius:10px;"></select>
-        <select class="fc" id="actMonth" onchange="renderAct()" style="flex:1;font-size:12px;padding:7px 10px;border-radius:10px;">
+        <select class="fc" id="actYear" onchange="renderAct()" style="flex:1;font-size:12px;padding:7px 10px;border-radius:6px;"></select>
+        <select class="fc" id="actMonth" onchange="renderAct()" style="flex:1;font-size:12px;padding:7px 10px;border-radius:6px;">
           <option value="">전체 월</option>
           <option value="01">1월</option><option value="02">2월</option><option value="03">3월</option>
           <option value="04">4월</option><option value="05">5월</option><option value="06">6월</option>
@@ -1052,9 +1053,9 @@
             <label class="fl">부품 검색 <span style="color:var(--red);font-size:9px">필수</span></label>
             <div style="position:relative;">
               <input class="fc" id="inPartSearch" placeholder="부품명, 규격, 코드 검색" oninput="searchInPart()" onfocus="searchInPart()" autocomplete="off" />
-              <div id="inPartAc" style="position:absolute;top:100%;left:0;right:0;background:#fff;border:1px solid var(--border);border-radius:8px;max-height:200px;overflow-y:auto;z-index:100;display:none;box-shadow:var(--shadow);"></div>
+              <div id="inPartAc" style="position:absolute;top:100%;left:0;right:0;background:#fff;border:1px solid var(--border);border-radius:6px;max-height:200px;overflow-y:auto;z-index:100;display:none;box-shadow:var(--shadow);"></div>
             </div>
-            <div id="inPartSelected" style="margin-top:8px;padding:10px 12px;background:var(--primary-light);border-radius:10px;font-size:13px;font-weight:600;color:var(--primary);display:none;justify-content:space-between;align-items:center;">
+            <div id="inPartSelected" style="margin-top:8px;padding:10px 12px;background:var(--primary-light);border-radius:6px;font-size:13px;font-weight:600;color:var(--primary);display:none;justify-content:space-between;align-items:center;">
               <span id="inPartLabel">—</span>
               <button type="button" onclick="clearInPart()" style="border:none;background:none;color:var(--text3);font-size:16px;cursor:pointer;padding:0 4px;">×</button>
             </div>
@@ -1135,7 +1136,7 @@
             고장 접수 및 조치 완료 시 이 기기로 알림을 받습니다.
           </div>
           <!-- iOS 비PWA: 홈화면 추가 안내 -->
-          <div id="iosGuide" style="display:none;background:#fef9c3;border:1px solid #fde047;border-radius:10px;padding:12px;font-size:12px;line-height:1.8;color:#713f12">
+          <div id="iosGuide" style="display:none;background:#fef9c3;border:1px solid #fde047;border-radius:6px;padding:12px;font-size:12px;line-height:1.8;color:#713f12">
             📲 <strong>아이폰 알림 설정 방법</strong><br>
             ① Safari 하단 <strong>공유 버튼(□↑)</strong> 탭<br>
             ② <strong>"홈 화면에 추가"</strong> 선택 → 추가<br>
@@ -1143,12 +1144,12 @@
             ④ 설정 탭 → 🔔 알림 허용 클릭<br>
             <span style="color:#92400e;font-size:11px">※ iOS 16.4 이상 + Safari에서만 가능</span>
           </div>
-          <div style="margin-top:10px;background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:14px;display:flex;justify-content:space-between;align-items:center;gap:12px;">
+          <div style="margin-top:10px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:14px;display:flex;justify-content:space-between;align-items:center;gap:12px;">
             <div style="min-width:0;">
               <div id="pushStatusTxt" style="font-size:13px;font-weight:600;color:var(--text)">상태 확인 중...</div>
               <div style="font-size:11px;color:var(--text3);margin-top:2px">고장접수·완료 시 즉시 알림</div>
             </div>
-            <button id="pushToggleBtn" onclick="handlePushToggle()" style="flex-shrink:0;padding:10px 18px;border-radius:10px;border:none;font-size:13px;font-weight:700;cursor:pointer;background:var(--primary);color:#fff;min-width:88px;transition:background 0.2s;">🔔 알림 허용</button>
+            <button id="pushToggleBtn" onclick="handlePushToggle()" style="flex-shrink:0;padding:10px 18px;border-radius:6px;border:none;font-size:13px;font-weight:700;cursor:pointer;background:var(--primary);color:#fff;min-width:88px;transition:background 0.2s;">🔔 알림 허용</button>
           </div>
           <div id="pushMsg" style="margin-top:8px;font-size:12px;color:var(--danger)"></div>
         </div>
@@ -1166,10 +1167,10 @@
         <input type="hidden" id="actCode" />
 
         <!-- 설비 사진 (라인명/설비명 위) -->
-        <div id="actEquipPhotoWrap" style="display:none;margin-bottom:12px;border-radius:12px;overflow:hidden;border:1px solid var(--border);"></div>
+        <div id="actEquipPhotoWrap" style="display:none;margin-bottom:12px;border-radius:6px;overflow:hidden;border:1px solid var(--border);"></div>
 
         <!-- 라인명 + 설비명 정보 -->
-        <div id="actEquipInfo" style="display:none;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:14px;">
+        <div id="actEquipInfo" style="display:none;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:12px 14px;margin-bottom:14px;">
           <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
             <div>
               <div style="font-size:10px;color:var(--text3);margin-bottom:2px;">라인명</div>
@@ -1212,7 +1213,7 @@
         <!-- 고장접수 사진 (다운타임 아래) -->
         <div id="actReportPhotoWrap" style="display:none;margin-bottom:14px;">
           <div style="font-size:11px;color:var(--text3);margin-bottom:6px;">📷 고장접수 사진</div>
-          <img id="actReportPhotoImg" src="" style="width:100%;max-height:200px;object-fit:cover;border-radius:12px;border:1px solid var(--border);display:block;" />
+          <img id="actReportPhotoImg" src="" style="width:100%;max-height:200px;object-fit:cover;border-radius:6px;border:1px solid var(--border);display:block;" />
         </div>
 
         <div class="fg">
@@ -1262,13 +1263,13 @@
             <input class="fc" id="actPartSearch" placeholder="전체 부품 검색 (부품명·규격·코드)" oninput="searchActParts()"
               onfocus="searchActParts()" autocomplete="off" />
             <div id="actPartAc"
-              style="position:absolute; top:100%; left:0; right:0; background:#fff; border:1px solid var(--border); border-radius:8px; max-height:180px; overflow-y:auto; z-index:100; display:none; box-shadow:var(--shadow-md);">
+              style="position:absolute; top:100%; left:0; right:0; background:#fff; border:1px solid var(--border); border-radius:6px; max-height:180px; overflow-y:auto; z-index:100; display:none; box-shadow:var(--shadow-md);">
             </div>
           </div>
           <div id="actPartSelected" style="margin-top:10px; display:flex; flex-direction:column; gap:6px;"></div>
         </div>
 
-        <div style="background:#fff5f5;border-radius:12px;padding:12px;margin-top:4px;display:flex;flex-direction:column;gap:10px;">
+        <div style="background:#fff5f5;border-radius:6px;padding:12px;margin-top:4px;display:flex;flex-direction:column;gap:10px;">
           <div class="fg" style="margin:0">
             <label class="fl">지연 분류 <span style="color:var(--red);font-size:9px">지연시 필수</span></label>
             <select class="fc" id="actDlyCat">
@@ -1940,7 +1941,7 @@
         const _equip = equips.find(e => e.equip_code === r.equip_code);
         const _photoUrl = normalizeDriveUrl(r.report_photo_url) || normalizeDriveUrl(r.equip_photo_url) || normalizeDriveUrl(_equip?.photo_url) || '';
         const photoHtml = _photoUrl
-          ? `<img src="${_photoUrl}" style="width:100%;height:168px;object-fit:cover;border-radius:10px 10px 0 0;display:block;border-bottom:1px solid var(--border)">`
+          ? `<img src="${_photoUrl}" style="width:100%;height:168px;object-fit:cover;border-radius:6px 10px 0 0;display:block;border-bottom:1px solid var(--border)">`
           : "";
 
         return `
@@ -2216,7 +2217,7 @@
         return;
       }
       box.innerHTML = actSelectedParts.map(p => `
-        <div style="display:flex; align-items:center; gap:8px; background:var(--surface2); padding:8px 10px; border-radius:8px; border:1px solid var(--border);">
+        <div style="display:flex; align-items:center; gap:8px; background:var(--surface2); padding:8px 10px; border-radius:6px; border:1px solid var(--border);">
           <div style="flex:1; font-size:12px; font-weight:600;">${p.label}<div style="font-size:10px; color:var(--text3); margin-top:2px;">현재 재고 ${p.stock_qty ?? 0}</div></div>
           <div style="display:flex; align-items:center; gap:6px;">
             <label style="font-size:10px; color:var(--text2)">사용수량:</label>
@@ -2431,7 +2432,7 @@
         const lookupStatus = isOpenReportStatus(e.latest_status) ? (e.latest_status || "접수") : (e.status || e.latest_status || "정상");
         const _lkpPhoto = normalizeDriveUrl(e.photo_url);
         const photoHtml = _lkpPhoto
-          ? `<img src="${_lkpPhoto}" style="width:100%;height:168px;object-fit:cover;border-radius:10px 10px 0 0;display:block;border-bottom:1px solid var(--border)">`
+          ? `<img src="${_lkpPhoto}" style="width:100%;height:168px;object-fit:cover;border-radius:6px 10px 0 0;display:block;border-bottom:1px solid var(--border)">`
           : "";
 
         return `
@@ -2485,12 +2486,12 @@
           <div style="margin-bottom:12px">
             <button onclick="filterLkp()" style="background:none;border:none;color:var(--primary);font-size:14px;font-weight:600;cursor:pointer;padding:0">‹ 목록으로</button>
           </div>
-          <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px">
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:14px;margin-bottom:12px">
             <div style="font-size:16px;font-weight:800">${eq.equip_code || equipCode}</div>
             <div style="font-size:13px;color:var(--text2);margin-top:2px">${eq.equip_name || eq.name || ''}</div>
             <div style="font-size:12px;color:var(--text3);margin-top:4px">📍 ${eq.location || eq.install_loc || '—'} &nbsp;·&nbsp; 담당: ${eq.manager || eq.owner || '—'}</div>
           </div>
-          <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px">
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:14px">
             <div style="font-size:13px;font-weight:700;margin-bottom:8px">📋 수리 &amp; 개선 &amp; 점검 이력 (${rows.length}건)</div>
             ${histHtml}
           </div>`;
@@ -2706,7 +2707,7 @@
       <div style="font-size:13px;color:#4b5563;text-align:center;line-height:1.6;margin-bottom:24px;">
         새로운 고장이 접수되거나 조치가 완료되면<br>즉시 푸시 알림으로 알려드립니다.
       </div>
-      <button onclick="pushPopupAllow()" style="width:100%;padding:14px;background:#3366ff;color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:10px;">✅ 알림 허용</button>
+      <button onclick="pushPopupAllow()" style="width:100%;padding:14px;background:#2563eb;color:#fff;border:none;border-radius:6px;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:10px;">✅ 알림 허용</button>
       <button onclick="pushPopupLater()" style="width:100%;padding:12px;background:transparent;color:#9ca3af;border:none;font-size:13px;cursor:pointer;">나중에</button>
     </div>
   </div>
