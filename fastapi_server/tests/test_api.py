@@ -170,8 +170,8 @@ def test_report_create_sends_discord(sqllog, monkeypatch):
     assert len(sent) == 1
     e = sent[0]["embeds"][0]
     assert "#7" in e["title"] and "라인정지" in e["title"] and e["color"] == 0xE53935
-    vals = {f["name"]: f["value"] for f in e["fields"]}
-    assert vals["위치/라인"] == "L3" and "CNC" in vals["설비"] and vals["증상"] == "누유"
+    assert "[L3]" in e["title"]
+    assert "CNC" in e["description"] and "**증상**\n└ 누유" in e["description"]
 
 
 def test_discord_skipped_without_url(monkeypatch):

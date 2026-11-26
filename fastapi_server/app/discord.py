@@ -34,30 +34,47 @@ def _v(x, limit: int = 1024) -> str:
     return t if len(t) <= limit else t[: limit - 1] + "…"
 
 
+def _md(x, limit: int = 1024) -> str:
+    """사용자 입력값이 디스코드 마크다운으로 깨지지 않게 이스케이프(+줄바꿈 정리)."""
+    s = " ".join(_v(x, limit).split())
+    for ch in "\\*_~`|>":
+        s = s.replace(ch, "\\" + ch)
+    return s
+
+
 def build_breakdown_message(report_id, b: dict, info: dict) -> dict:
+    """디스코드 알림 공통 양식(2026-11-26 사용자요청 "웹훅 메시지 양식 통일" — 공정문서 점검알람·불량알림과 동일):
+    제목 "이모지 [라인] 종류 · 핵심" / 본문 **묶음** + "└ 항목 · 값" 줄 / 하단 "시스템 · 시각"."""
     priority, impact = _v(b.get("priority")), _v(b.get("line_impact"))
     stop = impact == "라인정지"
-    fields = [
-        {"name": "설비", "value": f"{_v(info.get('equip_name'))}\n`{_v(b.get('equip_code'))}`", "inline": True},
-        {"name": "위치/라인", "value": _v(info.get("location")), "inline": True},
-        {"name": "유형", "value": _v(b.get("report_type")), "inline": True},
-        {"name": "우선순위", "value": priority, "inline": True},
-        {"name": "라인 영향", "value": f"🛑 {impact}" if stop else impact, "inline": True},
-        {"name": "접수자", "value": " / ".join(p for p in (_v(b.get("reporter")), _v(b.get("reporter_dept"))) if p != "-") or "-", "inline": True},
-        {"name": "증상", "value": (f"[{_v(b.get('symptom_tag'))}] " if _v(b.get("symptom_tag")) != "-" else "") + _v(b.get("symptom"), 900)},
+    line = _v(info.get("location"))
+    reporter = " / ".join(p for p in (_md(b.get("reporter")), _md(b.get("reporter_dept"))) if p != "-") or "-"
+    tag = _md(b.get("symptom_tag"))
+    symptom = [_md(s) for s in _v(b.get("symptom"), 900).splitlines() if s.strip()] or ["-"]
+    if tag != "-":
+        symptom[0] = f"[{tag}] {symptom[0]}"
+    sections = [
+        "**설비**\n"
+        f"└ {_md(info.get('equip_name'))} · `{_v(b.get('equip_code')).replace('`', '')}`\n"
+        f"└ 유형 · {_md(b.get('report_type'))}",
+        "**상태**\n"
+        f"└ 우선순위 · **{_md(priority)}**\n"
+        f"└ 라인 영향 · " + (f"🛑 **{_md(impact)}**" if stop else _md(impact)),
+        "**증상**\n" + "\n".join(f"└ {s}" for s in (symptom or ["-"])),
+        f"**접수자**\n└ {reporter}",
     ]
+    now = datetime.now().astimezone()
     embed = {
-        "title": f"🚨 설비 고장접수 #{report_id}" + (" — 라인정지" if stop else ""),
+        "title": f"🚨 [{line}] 설비 고장접수 · #{report_id}" + (" · 라인정지" if stop else ""),
         "url": settings.push_url,
         "color": _color(priority, impact),
-        "fields": fields,
-        "timestamp": datetime.now().astimezone().isoformat(),
-        "footer": {"text": "AIT 설비 관리시스템"},
+        "description": "\n\n".join(sections)[:4000],
+        "footer": {"text": f"설비 관리시스템 · {now.strftime('%m-%d %H:%M')} 접수"},
     }
     photo = _v(b.get("photo_url"), 2000)
     if photo.startswith("http"):
         embed["image"] = {"url": photo}
-    return {"username": "설비 고장접수", "embeds": [embed], "allowed_mentions": {"parse": []}}
+    return {"username": "AIT 설비알림", "embeds": [embed], "allowed_mentions": {"parse": []}}
 
 
 def post(payload: dict, url: str | None = None) -> bool:
