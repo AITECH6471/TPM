@@ -86,6 +86,17 @@ def result_list(request: Request):
         (request.query_params.get("equip_code", ""),)))
 
 
+@r.get("/pm/result/year")
+def result_year(request: Request):
+    """정기점검 화면(달력·대장)용: 한 해의 모든 설비 실적을 한 번에"""
+    year = str(num(request.query_params.get("year")) or "")
+    return ok(q(
+        """SELECT result_id AS id, pm_master_id, equip_code, pass_fail, value_num, memo, check_month,
+             inspector, inspect_date
+           FROM pm_result WHERE check_month LIKE %s""",
+        (f"{year}-%",)))
+
+
 @r.post("/pm/result/update")
 def result_update(b: dict = Body(default_factory=dict)):
     x("""UPDATE pm_result SET pass_fail=%s, value_num=%s, memo=%s, inspector=%s, inspect_date=%s, photo_url=%s

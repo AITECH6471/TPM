@@ -4,7 +4,7 @@ import { checkConn, saveConfig, testConn, loadRemoteSettings, renderEvaluationSe
 import { loadEquipment, filterEquipList, openEquipForm, openEquipDetail, enableEditMode, saveEquipment, confirmDeleteEquip, uploadEquipPhoto, removeEquipPhoto, exportEquipToCSV, openHistorySlideOver, closeHistorySlideOver, submitHistoryAction, deleteHistoryReport, openHistoryAdd, openHistoryEdit, showQR, loadEquipFormParts, addEquipFormPart, toggleEquipIdle, setEquipTab, togglePMTarget, loadEquipSubItems, addEquipSubItem, deleteEquipSubItem, uploadSubItemPhoto, updateSubItemPhoto, openPhotoModal } from './js/equipment.js';
 import { loadReports, openReportModal, submitAction, uploadReportPhoto, removeReportPhoto, openReportNewModal, submitNewReport, renderReportBoard, addReportYear } from './js/reports.js';
 import { loadParts, renderPartsList, showPartUsage, openPartsMasterForm, savePartsMaster, openPartsIn, savePartsIn, openPartsOut, savePartsOut, openPartsEquipLink, renderPELList, filterPELList, togglePELSuggest, removePELLink, savePartsEquipLink, openPartsHistory, closePartsHistory, syncPartsPhotoPreview, uploadPartsPhoto, removePartsPhoto } from './js/parts.js';
-import { loadPMMasterList, openPMMasterForm, savePMMasterItem, editPMMasterItem, deletePMMasterItem, loadPMPlan, addNewYear, savePMPlans, openPMEdit, savePMEditSingle, ensureYearOptions, cyclePMStatus, cyclePMOverviewCell, saveAllPMResults, setPMPlanDate, loadPMResultsForEquip, openPMResultHistory, closePMResultHistory, renderPMEquipList, selectPMEquip, renderPMPlanEquipList, selectPMPlanEquip, renderPMPlanMonthGrid, savePMSingleEquip, savePMResultRow, saveRowResults, renderPMOverviewTable, updateCheckMonthSelect, openPMPlanSlideover, closePMPlanSlideover, setPMPlanDateFromSlide, savePMPlanFromSlideover, openPMResultEntry, closePMResultEntry, setPMEntryResult, savePMResultEntry, openPMChecksheet, savePMChecksheet, saveInlineItem, openCopyFromEquip, previewCopyItems, saveCopyFromEquip, renderChecksheetHistory, toggleChecksheetHistory, openChecksheetMonthDetail, openPMItemsModal, renderPMItemsTable, saveInlineItemModal, deletePMItemInModal, updatePMItemsSel, deleteSelectedPMItems, uploadPMItemPhoto, uploadAndUpdateItemPhoto, removePMItemPhoto, openPMHistoryModal, showPMHistoryList, openPMHistoryDetail, uploadPMChecksheetPhoto, openPMResultEdit, savePMResultEdit, deletePMResultRow, deletePMResultMonth } from './js/pm.js';
+import { initPM, loadPM } from './js/pm.js';
 import { loadStats } from './js/stats.js';
 
 function bindGlobals() {
@@ -47,40 +47,6 @@ function bindGlobals() {
     savePartsIn,
     openPartsOut,
     savePartsOut,
-    loadPMPlan,
-    addNewYear,
-    savePMPlans,
-    openPMEdit,
-    savePMEditSingle,
-    loadPMMasterList,
-    openPMMasterForm,
-    savePMMasterItem,
-    editPMMasterItem,
-    deletePMMasterItem,
-    cyclePMStatus,
-    cyclePMOverviewCell,
-    saveAllPMResults,
-    setPMPlanDate,
-    loadPMResultsForEquip,
-    openPMResultHistory,
-    closePMResultHistory,
-    renderPMEquipList,
-    selectPMEquip,
-    renderPMPlanEquipList,
-    selectPMPlanEquip,
-    renderPMPlanMonthGrid,
-    savePMSingleEquip,
-    savePMResultRow,
-    saveRowResults,
-    renderPMOverviewTable,
-    openPMPlanSlideover,
-    closePMPlanSlideover,
-    setPMPlanDateFromSlide,
-    savePMPlanFromSlideover,
-    openPMResultEntry,
-    closePMResultEntry,
-    setPMEntryResult,
-    savePMResultEntry,
     openHistorySlideOver,
     closeHistorySlideOver,
     submitHistoryAction,
@@ -105,33 +71,6 @@ function bindGlobals() {
     toggleEquipIdle,
     setEquipTab,
     togglePMTarget,
-    updateCheckMonthSelect,
-    openPMChecksheet,
-    savePMChecksheet,
-    saveInlineItem,
-    openCopyFromEquip,
-    previewCopyItems,
-    saveCopyFromEquip,
-    renderChecksheetHistory,
-    toggleChecksheetHistory,
-    openChecksheetMonthDetail,
-    openPMItemsModal,
-    renderPMItemsTable,
-    saveInlineItemModal,
-    deletePMItemInModal,
-    updatePMItemsSel,
-    deleteSelectedPMItems,
-    uploadPMItemPhoto,
-    uploadAndUpdateItemPhoto,
-    removePMItemPhoto,
-    openPMHistoryModal,
-    showPMHistoryList,
-    openPMHistoryDetail,
-    uploadPMChecksheetPhoto,
-    openPMResultEdit,
-    savePMResultEdit,
-    deletePMResultRow,
-    deletePMResultMonth,
     driveImgFallback,
   });
 }
@@ -142,12 +81,11 @@ async function init() {
     'page-equip-list': loadEquipment,
     'page-reports': loadReports,
     'page-spare-parts': loadParts,
-    'page-pm-plan': async () => { await Promise.allSettled([loadPMPlan(), loadPMMasterList()]); },
+    'page-pm-plan': () => { initPM(); return loadPM(); },
     'page-stats': loadStats,
   });
   bindGlobals();
   renderEvaluationSelects();
-  ensureYearOptions();
   // 순차 대기(설정→연결→목록→대시보드 ≈ 4왕복) 대신 병렬 실행. 중복 GET은 api()가 합쳐줌.
   const settingsP = loadRemoteSettings().then(() => { if ($('cfg-base-url')) $('cfg-base-url').value = state.baseUrl; });
   const baseBefore = state.baseUrl;

@@ -7,15 +7,10 @@ document.addEventListener('click', (e) => {
   if (btn) showQR(btn.dataset.qrCode, btn.dataset.qrName);
 });
 
-// n8n SQL이 값을 작은따옴표로 직접 보간하므로, 문자열 내 작은따옴표(예: ASS'Y)가
-// 쿼리를 깨뜨려 "Error in workflow"가 발생한다. 전송 전 작은따옴표를 ''로 이스케이프.
+// n8n 시절 SQL 문자열 치환용으로 ' 를 '' 로 바꿨지만, FastAPI는 값을 바인딩하므로 그대로 보낸다
+// (바꾸면 PCB ASS'Y 같은 이름이 저장할 때마다 ASS''Y로 바뀜)
 function sqlSafe(obj) {
-  const out = {};
-  for (const k in obj) {
-    const v = obj[k];
-    out[k] = typeof v === 'string' ? v.replace(/'/g, "''") : v;
-  }
-  return out;
+  return obj;
 }
 
 export async function loadEquipment() {

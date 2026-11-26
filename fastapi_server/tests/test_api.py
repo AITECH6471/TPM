@@ -52,7 +52,8 @@ N8N = {
     ("POST", "/spare-parts/transaction/out"),
     ("PUT", "/report/update-status"),
 }
-NEW = {("POST", "/report/history-add"), ("POST", "/report/update"), ("POST", "/report/delete")}
+NEW = {("POST", "/report/history-add"), ("POST", "/report/update"), ("POST", "/report/delete"),
+       ("GET", "/pm/result/year")}
 
 
 def test_all_endpoints_exist_under_api():
@@ -81,6 +82,16 @@ def test_static_serves_only_allowed_files():
 def test_stats_month_format(sqllog):
     TestClient(app).get("/api/stats/equipment")
     assert "'%Y-%m'" in sqllog[0] and "%%" not in sqllog[0]
+
+
+def test_pm_result_year_filters_by_year(monkeypatch):
+    from app.routers import pm
+    seen = {}
+    monkeypatch.setattr(pm, "q", lambda sql, p=None: seen.update(sql=sql, p=p) or [])
+    assert TestClient(app).get("/api/pm/result/year?year=2026").json()["success"]
+    assert seen["p"] == ("2026-%",) and "LIKE %s" in seen["sql"]
+    TestClient(app).get("/api/pm/result/year?year=2026' OR 1=1")   # 숫자가 아니면 빈 연도 → 결과 없음
+    assert seen["p"] == ("-%",)
 
 
 @pytest.fixture
