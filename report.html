@@ -9,886 +9,206 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="AIT TPM" />
-  <meta name="theme-color" content="#1d4ed8" />
+  <meta name="theme-color" content="#ffffff" />
   <link rel="manifest" href="manifest.json" />
   <link rel="apple-touch-icon" href="ait-logo.png" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
 
   <style>
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
+    /* adms-mobile(부적합품관리시스템)과 같은 결: slate 바탕, 흰 둥근 카드, 파란 강조, 하단 탭바 */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      /* pp.aitkorea.app과 같은 색. 현장용이라 글자·버튼 크기와 6px 모서리는 유지 */
-      --bg: #f8f8fa;
-      --surface: #ffffff;
-      --surface2: #f8f8fa;
-      --border: #dde1e8;
-      --primary: #2563eb;
-      --primary-light: #eaf1fe;
-      --green: #189a4a;
-      --green-light: #e6f5ec;
-      --red: #d3403f;
-      --red-light: #fbe9e9;
-      --orange: #c75a1f;
-      --orange-light: #fdebe1;
-      --yellow: #d98c11;
-      --yellow-light: #fdf3e1;
-      --text: #0c1016;
-      --text2: #3c4254;
-      --text3: #6b6b74;
-      --shadow: none;
-      --shadow-md: 0 8px 28px rgba(15, 23, 42, 0.16);
-      --shadow-sm: none;
-      --r: 6px;
-      --rs: 6px;
-    }
-
-    html,
-    body {
-      height: 100%;
-      overflow: hidden;
-      background: var(--bg);
-    }
-
-    /* 목록을 아래로 당겨도 브라우저가 페이지를 새로고침하지 않게 */
-    html, body, .body, .sheet {
-      overscroll-behavior-y: contain;
-    }
-
-    body {
-      font-family: 'Pretendard Variable', Pretendard, 'Malgun Gothic', -apple-system, sans-serif;
-      color: var(--text);
-      font-size: 14px;
-      display: flex;
-      flex-direction: column;
-      max-width: 520px;
-      margin: 0 auto;
-      min-height: 100%;
-      background: var(--surface);
-      border-inline: 1px solid var(--border);
-    }
-
-    .hd {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      flex-shrink: 0;
-      padding: 12px 16px 0;
-    }
-
-    .hd-top {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      gap: 6px;
-      padding: 14px 0 10px;
-      position: relative;
-    }
-
-    .hd-logo {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      font-weight: 700;
-      color: #0f172a;
-    }
-
-    .hd-sub {
-      font-size: 12px;
-      color: var(--text3);
-      line-height: 1.5;
-    }
-
-    .dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--text3);
-      position: absolute;
-      top: 18px;
-      right: 6px;
-      box-shadow: 0 0 0 4px rgba(156, 163, 175, 0.12);
-    }
-
-    .dot.ok {
-      background: var(--green);
-      box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.12);
-    }
-
-    .dot.err {
-      background: var(--red);
-      box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.12);
-    }
-
-    .tabs {
-      display: flex;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-
-    .tabs::-webkit-scrollbar {
-      display: none;
-    }
-
-    .tab {
-      flex: 1;
-      min-width: 72px;
-      padding: 10px 6px;
-      font-size: 12px;
-      font-weight: 700;
-      font-family: inherit;
-      background: none;
-      border: none;
-      border-bottom: 3px solid transparent;
-      color: var(--text3);
-      cursor: pointer;
-      transition: 0.18s ease;
-      white-space: nowrap;
-    }
-
-    .tab.on {
-      color: var(--primary);
-      border-bottom-color: var(--primary);
-    }
-
-    .body {
-      flex: 1;
-      overflow-y: auto;
-      padding: 14px;
-      -webkit-overflow-scrolling: touch;
-      background: var(--bg);
-    }
-
-    .page {
-      display: none;
-    }
-
-    .page.on {
-      display: block;
-    }
-
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--r);
-      box-shadow: var(--shadow-sm);
-      margin-bottom: 14px;
-      overflow: hidden;
-    }
-
-    .card-h {
-      padding: 12px 15px;
-      border-bottom: 1px solid var(--border);
-      background: #f3f3f5;
-      font-size: 13px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      color: var(--text);
-    }
-
-    .card-b {
-      padding: 14px;
-    }
-
-    .fg {
-      margin-bottom: 12px;
-    }
-
-    .fg:last-child {
-      margin-bottom: 0;
-    }
-
-    .fl {
-      display: block;
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--text2);
-      margin-bottom: 6px;
-    }
-
-    .fc {
-      width: 100%;
-      padding: 11px 12px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--rs);
-      font-size: 13px;
-      font-family: inherit;
-      color: var(--text);
-      outline: none;
-      transition: 0.15s ease;
-      -webkit-appearance: none;
-    }
-
-    .fc:focus {
-      border-color: var(--primary);
-      background: var(--surface);
-    }
-
-    .fc::placeholder {
-      color: var(--text3);
-    }
-
-    textarea.fc {
-      resize: none;
-      min-height: 88px;
-      line-height: 1.6;
-    }
-
-    .chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .chip {
-      padding: 8px 13px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 700;
-      border: 1px solid var(--border);
-      background: var(--surface2);
-      color: var(--text2);
-      cursor: pointer;
-      transition: 0.15s ease;
-    }
-
-    .chip:hover {
-      border-color: var(--primary);
-    }
-
-    .chip.c-on {
-      border-color: var(--primary);
-      background: var(--primary-light);
-      color: var(--primary);
-          }
-
-    .chip.c-긴급.c-on,
-    .chip.c-라인정지.c-on {
-      border-color: var(--red);
-      background: var(--red-light);
-      color: var(--red);
-    }
-
-    .chip.c-보통.c-on,
-    .chip.c-부분정지.c-on {
-      border-color: var(--yellow);
-      background: var(--yellow-light);
-      color: #b45309;
-    }
-
-    .chip.c-낮음.c-on,
-    .chip.c-생산가능.c-on {
-      border-color: var(--green);
-      background: var(--green-light);
-      color: var(--green);
-    }
-
-    .chip.c-설비고장.c-on {
-      border-color: var(--red);
-      background: var(--red-light);
-      color: var(--red);
-    }
-
-    .chip.c-부품불량.c-on {
-      border-color: var(--orange);
-      background: var(--orange-light);
-      color: var(--orange);
-    }
-
-    .chip.c-기타.c-on {
-      border-color: var(--primary);
-      background: var(--primary-light);
-      color: var(--primary);
-    }
-
-    .helper {
-      margin-top: 6px;
-      font-size: 11px;
-      color: var(--text3);
-      line-height: 1.5;
-    }
-
-    .pz {
-      border: 2px dashed var(--border);
-      border-radius: var(--rs);
-      padding: 18px 12px;
-      text-align: center;
-      cursor: pointer;
-      background: var(--surface2);
-      transition: 0.15s ease;
-    }
-
-    .pz:hover {
-      border-color: var(--primary);
-      background: var(--primary-light);
-    }
-
-    .pz-ico {
-      font-size: 24px;
-      margin-bottom: 4px;
-    }
-
-    .pz-txt {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--text2);
-    }
-
-    .pz-hint {
-      font-size: 11px;
-      color: var(--text3);
-      margin-top: 4px;
-    }
-
-    .photo-preview {
-      width: 100%;
-      max-height: 180px;
-      object-fit: cover;
-      border-radius: var(--rs);
-      margin-top: 10px;
-      display: none;
-      border: 1px solid var(--border);
-    }
-
-    .upst {
-      margin-top: 8px;
-      font-size: 11px;
-      padding: 6px 10px;
-      border-radius: var(--rs);
-      display: none;
-      font-weight: 600;
-    }
-
-    .upst.ing {
-      display: block;
-      background: var(--primary-light);
-      color: var(--primary);
-    }
-
-    .upst.ok {
-      display: block;
-      background: var(--green-light);
-      color: var(--green);
-    }
-
-    .upst.err {
-      display: block;
-      background: var(--red-light);
-      color: var(--red);
-    }
-
-    .btn {
-      width: 100%;
-      padding: 14px;
-      border-radius: var(--rs);
-      font-size: 14px;
-      font-weight: 700;
-      font-family: inherit;
-      cursor: pointer;
-      border: none;
-      transition: 0.15s ease;
-    }
-
-    .btn-p {
-      background: var(--primary);
-      color: #fff;
-    }
-
-    .btn-p:active {
-      transform: scale(0.98);
-    }
-
-    .btn-p:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    .btn-s {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      color: var(--text2);
-    }
-
-    .btn-sm {
-      width: auto;
-      padding: 8px 14px;
-      font-size: 12px;
-      border-radius: var(--rs);
-    }
-
-    .ok-screen {
-      display: none;
-      text-align: center;
-      padding: 34px 16px;
-    }
-
-    .ok-ico {
-      font-size: 56px;
-      margin-bottom: 12px;
-      animation: pop 0.5s cubic-bezier(.175, .885, .32, 1.275);
-    }
-
-    @keyframes pop {
-      0% {
-        transform: scale(0);
-      }
-
-      100% {
-        transform: scale(1);
-      }
-    }
-
-    .ok-title {
-      font-size: 21px;
-      font-weight: 800;
-      color: var(--green);
-      margin-bottom: 6px;
-    }
-
-    .ok-sub {
-      font-size: 13px;
-      color: var(--text3);
-      line-height: 1.7;
-    }
-
-    .ok-no {
-      font-size: 28px;
-      font-weight: 800;
-      color: var(--primary);
-      margin: 14px 0;
-    }
-
-    .ri {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--r);
-      padding: 12px 14px;
-      margin-bottom: 10px;
-      cursor: pointer;
-      box-shadow: var(--shadow-sm);
-      transition: 0.15s ease;
-      position: relative;
-    }
-
-    .ri:hover {
-      box-shadow: var(--shadow);
-    }
-
-    .ri-top {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 6px;
-    }
-
-    .ri-code {
-      font-size: 13px;
-      font-weight: 800;
-      color: var(--primary);
-    }
-
-    .ri-bgs {
-      margin-left: auto;
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-
-    .ri-sym {
-      font-size: 12px;
-      color: var(--text2);
-      line-height: 1.5;
-      margin-bottom: 6px;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-
-    .ri-meta {
-      font-size: 11px;
-      color: var(--text3);
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .elapsed {
-      font-size: 11px;
-      font-weight: 800;
-      padding: 3px 8px;
-      border-radius: 999px;
-    }
-
-    .elapsed.e-ok {
-      background: var(--green-light);
-      color: var(--green);
-    }
-
-    .elapsed.e-warn {
-      background: var(--yellow-light);
-      color: #b45309;
-    }
-
-    .elapsed.e-over {
-      background: var(--orange-light);
-      color: var(--orange);
-    }
-
-    .elapsed.e-crit {
-      background: var(--red-light);
-      color: var(--red);
-    }
-
-    .bdg {
-      display: inline-flex;
-      align-items: center;
-      padding: 3px 9px;
-      border-radius: 999px;
-      font-size: 11px;
-      font-weight: 800;
-    }
-
-    .bdg-접수 {
-      background: var(--yellow-light);
-      color: #b45309;
-    }
-
-    .bdg-확인중 {
-      background: #e8f1ff;
-      color: #2563eb;
-    }
-
-    .bdg-수리중 {
-      background: var(--orange-light);
-      color: var(--orange);
-    }
-
-    .bdg-완료 {
-      background: var(--green-light);
-      color: var(--green);
-    }
-
-    .bdg-긴급 {
-      background: var(--red-light);
-      color: var(--red);
-    }
-
-    .bdg-보통 {
-      background: var(--yellow-light);
-      color: #b45309;
-    }
-
-    .bdg-낮음 {
-      background: var(--green-light);
-      color: var(--green);
-    }
-
-    .frow {
-      display: flex;
-      gap: 6px;
-      overflow-x: auto;
-      margin-bottom: 12px;
-      scrollbar-width: none;
-      padding-bottom: 2px;
-    }
-
-    .frow::-webkit-scrollbar {
-      display: none;
-    }
-
-    .fchip {
-      padding: 7px 13px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 700;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      color: var(--text3);
-      cursor: pointer;
-      white-space: nowrap;
-      transition: 0.15s ease;
-    }
-
-    .fchip.on {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: #fff;
-    }
-
-    .mstats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-bottom: 12px;
-    }
-
-    .ms {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-left: 3px solid var(--primary);
-      border-radius: var(--r);
-      padding: 12px 8px;
-      text-align: center;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .ms-v {
-      font-size: 22px;
-      font-weight: 800;
-      line-height: 1;
-      margin-bottom: 4px;
-    }
-
-    .ms-l {
-      font-size: 10px;
-      color: var(--text3);
-      font-weight: 600;
-    }
-
-    .ms-v.r {
-      color: var(--red);
-    }
-
-    .ms-v.g {
-      color: var(--green);
-    }
-
-    .ms-v.o {
-      color: var(--orange);
-    }
-
-    .ov {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(17, 24, 39, 0.42);
-      z-index: 200;
-      align-items: center;
-      justify-content: center;
-      padding: 14px;
-    }
-
-    .ov.on {
-      display: flex;
-    }
-
-    .sheet {
-      background: var(--surface);
-      border-radius: 8px;
-      width: 100%;
-      max-width: 520px;
-      max-height: 92vh;
-      overflow-y: auto;
-      box-shadow: var(--shadow);
-      padding-bottom: env(safe-area-inset-bottom, 16px);
-    }
-
-    .sh-handle {
-      width: 42px;
-      height: 4px;
-      background: var(--border);
-      border-radius: 999px;
-      margin: 12px auto 14px;
-    }
-
-    .sh-title {
-      font-size: 16px;
-      font-weight: 800;
-      padding: 0 18px 12px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .sh-body {
-      padding: 14px 18px;
-    }
-
-    .sh-foot {
-      padding: 12px 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .empty {
-      text-align: center;
-      padding: 32px 16px;
-      color: var(--text3);
-      font-size: 13px;
-    }
-
-    .empty-ico {
-      font-size: 32px;
-      margin-bottom: 8px;
-    }
-
-    .equip-lock {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: var(--r);
-      padding: 14px;
-      margin-bottom: 12px;
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      gap: 12px;
-    }
-
-    .equip-lock img {
-      width: 100%;
-      max-width: 420px;
-      height: 420px;
-      border-radius: var(--r);
-      object-fit: cover;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      box-shadow: var(--shadow);
-      display: block;
-      margin: 0 auto;
-    }
-
-    .equip-lock-title {
-      font-size: 15px;
-      font-weight: 800;
-      color: var(--text);
-      margin-bottom: 4px;
-    }
-
-    .equip-lock-meta {
-      font-size: 12px;
-      color: var(--text3);
-      line-height: 1.6;
-    }
-
-    .badge-inline {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 4px 8px;
-      border-radius: 999px;
-      font-size: 11px;
-      font-weight: 800;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      color: var(--primary);
-      margin-top: 6px;
-    }
-
-    #eqInfo {
-      display: none;
-      margin-top: 10px;
-      padding: 14px;
-      background: var(--primary-light);
-      border-radius: var(--r);
-      font-size: 12px;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      gap: 12px;
-    }
-
-    #eqImg {
-      width: 100%;
-      max-width: 420px;
-      height: 420px;
-      border-radius: var(--r);
-      object-fit: cover;
-      display: none;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow);
-      margin: 0 auto;
-    }
-
-    .repeat-list {
-      display: grid;
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    .repeat-btn {
-      width: 100%;
-      text-align: left;
-      border: 1px solid var(--border);
-      background: var(--surface2);
-      border-radius: var(--rs);
-      padding: 10px 12px;
-      cursor: pointer;
-      transition: 0.15s ease;
-    }
-
-    .repeat-btn:hover {
-      border-color: var(--primary);
-      background: var(--primary-light);
-    }
-
-    .repeat-title {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 4px;
-    }
-
-    .repeat-meta {
-      font-size: 11px;
-      color: var(--text3);
-      line-height: 1.5;
-    }
-
-    @media (max-width: 480px) {
-
-      #eqImg,
-      .equip-lock img {
-        max-width: 100%;
-        height: 320px;
-      }
-    }
+      --bg: #f8fafc; --surface: #ffffff; --surface2: #f1f5f9; --border: #e2e8f0;
+      --primary: #2563eb; --primary-d: #1d4ed8; --primary-light: #dbeafe;
+      --green: #059669; --green-light: #d1fae5; --red: #dc2626; --red-light: #fee2e2;
+      --orange: #ea580c; --orange-light: #ffedd5; --yellow: #d97706; --yellow-light: #fef3c7;
+      --text: #0f172a; --text2: #475569; --text3: #64748b;
+      --shadow: 0 1px 2px rgba(15, 23, 42, .05); --shadow-md: 0 8px 24px rgba(15, 23, 42, .14); --shadow-sm: 0 1px 2px rgba(15, 23, 42, .05);
+      --r: 12px; --rs: 10px;
+    }
+    html, body { height: 100%; overflow: hidden; background: var(--bg); }
+    body { font-family: 'Pretendard Variable', Pretendard, -apple-system, 'Malgun Gothic', sans-serif; color: var(--text); font-size: 15px; line-height: 1.5;
+      display: flex; flex-direction: column; max-width: 520px; margin: 0 auto; min-height: 100%; border-inline: 1px solid var(--border); }
+    button { font-family: inherit; }
+
+    /* 상단 헤더 */
+    .hd { flex-shrink: 0; height: 52px; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; background: var(--surface); border-bottom: 1px solid var(--border); }
+    .hd-logo { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700; color: var(--text); }
+    .hd-logo img { height: 24px; }
+    .dot { width: 9px; height: 9px; border-radius: 50%; background: #cbd5e1; }
+    .dot.ok { background: var(--green); } .dot.err { background: var(--red); }
+
+    /* 하단 탭바 */
+    .tabs { flex-shrink: 0; display: flex; height: calc(64px + env(safe-area-inset-bottom, 0px)); padding-bottom: env(safe-area-inset-bottom, 0px);
+      background: var(--surface); border-top: 1px solid var(--border); box-shadow: 0 -1px 4px rgba(0, 0, 0, .06); }
+    .tab { flex: 1; min-width: 0; border: 0; background: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+      font-size: 11px; font-weight: 600; color: var(--text3); cursor: pointer; white-space: nowrap; }
+    .tab svg { width: 22px; height: 22px; }
+    .tab.on { color: var(--primary); }
+
+    .body { flex: 1; overflow-y: auto; padding: 14px 14px 24px; -webkit-overflow-scrolling: touch; overscroll-behavior-y: contain; }
+    .page { display: none; } .page.on { display: block; }
+
+    /* 화면 머리: 제목 + 보조정보 + 파란 진행 줄 */
+    .sh-h { display: grid; gap: 7px; margin-bottom: 12px; }
+    .sh-h .row { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+    .sh-h h1 { font-size: 18px; font-weight: 700; flex-shrink: 0; }
+    .sh-h .row span { min-width: 0; font-size: 12px; color: #94a3b8; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    .sh-h .bar { height: 4px; border-radius: 99px; background: var(--surface2); overflow: hidden; }
+    .sh-h .bar i { display: block; height: 100%; width: 100%; border-radius: 99px; background: var(--primary); transition: width .3s cubic-bezier(.16, 1, .3, 1); }
+
+    .banner { display: flex; justify-content: space-between; gap: 8px; border-radius: 12px; padding: 10px 12px; font-size: 14px; margin-bottom: 10px; }
+    .banner.ok { background: #ecfdf5; color: #065f46; } .banner.warn { background: #fffbeb; color: #92400e; } .banner.err { background: #fef2f2; color: #b91c1c; }
+    .banner button { border: 0; background: none; color: inherit; font-size: 12px; font-weight: 700; text-decoration: underline; cursor: pointer; flex-shrink: 0; }
+
+    /* 카드·입력 */
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); box-shadow: var(--shadow); margin-bottom: 10px; overflow: hidden; }
+    .card-h { padding: 14px 14px 0; font-size: 14px; font-weight: 700; display: flex; align-items: baseline; justify-content: space-between; gap: 8px; color: var(--text); }
+    .card-b { padding: 10px 14px 14px; }
+    .fg { margin-bottom: 14px; } .fg:last-child { margin-bottom: 0; }
+    .fl { display: block; font-size: 13.5px; font-weight: 700; color: var(--text); margin-bottom: 7px; }
+    .fc { width: 100%; padding: 11px 12px; background: #fff; border: 1px solid #cbd5e1; border-radius: var(--rs); font-size: 15px; font-family: inherit; color: var(--text); outline: none; -webkit-appearance: none; }
+    .fc:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 99, 235, .15); }
+    .fc::placeholder { color: #94a3b8; }
+    textarea.fc { resize: none; min-height: 84px; line-height: 1.6; }
+    .helper { margin-top: 6px; font-size: 12px; color: var(--text3); line-height: 1.5; }
+    .mir-src { display: none !important; }
+
+    /* 유형: 세그먼트 */
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    #typeC { flex-wrap: nowrap; gap: 2px; background: var(--surface2); border-radius: 10px; padding: 3px; }
+    #typeC .chip { flex: 1; border: 0; background: none; border-radius: 8px; padding: 10px 4px; font-size: 14px; font-weight: 700; color: var(--text3); cursor: pointer; }
+    #typeC .chip.c-on { background: var(--surface); color: var(--primary); box-shadow: 0 1px 3px rgba(0, 0, 0, .1); }
+
+    /* 큰 버튼(타일)·칩 */
+    .tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+    .tile { min-height: 52px; border: 1px solid #cbd5e1; border-radius: 12px; background: var(--surface); color: var(--text); font-size: 15px; font-weight: 700; cursor: pointer; padding: 6px; transition: transform .1s; word-break: keep-all; }
+    .tile:active { transform: scale(.96); }
+    .tile small { display: block; font-size: 11px; font-weight: 500; opacity: .7; }
+    .tile[aria-pressed="true"] { background: var(--primary); border-color: var(--primary); color: #fff; box-shadow: 0 4px 10px rgba(37, 99, 235, .3); }
+    .tiles.sm .tile { min-height: 44px; font-size: 13.5px; }
+    .mchip { border: 1px solid #cbd5e1; background: var(--surface); color: var(--text); border-radius: 99px; padding: 8px 13px; min-height: 38px; font-size: 13.5px; font-weight: 600; cursor: pointer; }
+    .mchip[aria-pressed="true"] { border-color: var(--primary); background: var(--primary-light); color: var(--primary); }
+    .mchip.more { color: var(--primary); }
+    .seg4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; }
+    .seg4 button { border: 0; border-top: 4px solid var(--border); background: none; padding: 7px 0 2px; font-size: 13.5px; font-weight: 700; color: var(--text3); text-align: left; cursor: pointer; }
+    .seg4 button.past { border-top-color: var(--primary); color: var(--text); }
+    .seg4 button[aria-pressed="true"] { border-top-color: var(--primary); color: var(--primary); }
+    .eqbtn { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; border: 1px solid var(--border); background: var(--surface); border-radius: 12px; padding: 11px 12px; margin-bottom: 7px; cursor: pointer; color: var(--text); }
+    .eqbtn b { display: block; font-size: 15px; } .eqbtn span { display: block; font-size: 12.5px; color: var(--text3); }
+    .eqbtn:active { transform: scale(.99); }
+    .locked { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 2px 0; }
+    .locked span { display: block; font-size: 12px; color: var(--text3); } .locked b { font-size: 16px; }
+    .locked button, .linkbtn { border: 0; background: none; color: var(--primary); font-size: 13.5px; font-weight: 700; cursor: pointer; padding: 6px; flex-shrink: 0; }
+
+    /* 사진 */
+    .pz { border: 2px dashed #cbd5e1; border-radius: 12px; padding: 18px 12px; text-align: center; cursor: pointer; background: var(--surface); }
+    .pz:active { background: var(--surface2); }
+    .pz-ico { font-size: 24px; margin-bottom: 2px; } .pz-txt { font-size: 13.5px; font-weight: 700; color: var(--text2); } .pz-hint { font-size: 11.5px; color: var(--text3); margin-top: 2px; }
+    .photo-preview { width: 100%; max-height: 200px; object-fit: contain; border-radius: 10px; margin-top: 10px; display: none; background: var(--surface2); }
+    .upst { margin-top: 8px; font-size: 12px; padding: 7px 10px; border-radius: 8px; display: none; font-weight: 600; }
+    .upst.ing { display: block; background: var(--primary-light); color: var(--primary); }
+    .upst.ok { display: block; background: var(--green-light); color: var(--green); }
+    .upst.err { display: block; background: var(--red-light); color: var(--red); }
+
+    /* 버튼 */
+    .btn { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; min-height: 50px; padding: 12px; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; border: 0; }
+    .btn-p { background: var(--primary); color: #fff; } .btn-p:active { background: var(--primary-d); }
+    .btn-p:disabled { opacity: .5; cursor: not-allowed; }
+    .btn-s { background: var(--surface); border: 1px solid #cbd5e1; color: var(--text); }
+    .btn-sm { width: auto; min-height: 40px; padding: 8px 14px; font-size: 14px; border-radius: 10px; }
+    .stepper { display: flex; align-items: stretch; border: 1px solid #cbd5e1; border-radius: 12px; overflow: hidden; background: #fff; }
+    .stepper button { width: 56px; border: 0; background: var(--surface2); font-size: 24px; font-weight: 700; color: var(--text); cursor: pointer; }
+    .stepper .fc { border: 0; border-radius: 0; text-align: center; font-size: 22px; font-weight: 800; box-shadow: none; }
+
+    /* 접수 완료 */
+    .ok-screen { display: none; text-align: center; padding: 40px 12px; }
+    .ok-ico { width: 68px; height: 68px; border-radius: 50%; background: var(--green-light); color: var(--green); display: grid; place-items: center; margin: 0 auto 14px; font-size: 32px; font-weight: 800; animation: pop .4s cubic-bezier(.175, .885, .32, 1.275); }
+    @keyframes pop { 0% { transform: scale(0); } 100% { transform: scale(1); } }
+    .ok-title { font-size: 20px; font-weight: 800; margin-bottom: 6px; }
+    .ok-sub { font-size: 14px; color: var(--text3); line-height: 1.7; }
+    .ok-no { font-size: 30px; font-weight: 800; color: var(--primary); margin: 12px 0 20px; }
+
+    /* 목록 카드 */
+    .ri { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); box-shadow: var(--shadow); margin-bottom: 10px; cursor: pointer; position: relative; }
+    .ri:active { transform: scale(.99); }
+    .ri img { border-radius: 0 !important; }
+    .ri-top { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+    .ri-code { font-size: 15px; font-weight: 700; color: var(--text); }
+    .ri-bgs { margin-left: auto; display: flex; gap: 5px; flex-wrap: wrap; }
+    .ri-sym { font-size: 14px; color: var(--text); line-height: 1.5; margin: 4px 0 6px; }
+    .ri-meta { font-size: 12px; color: var(--text3); display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .elapsed { font-size: 12px; font-weight: 600; padding: 3px 9px; border-radius: 999px; }
+    .elapsed.e-ok { background: var(--green-light); color: var(--green); } .elapsed.e-warn { background: var(--yellow-light); color: #b45309; }
+    .elapsed.e-over { background: var(--orange-light); color: var(--orange); } .elapsed.e-crit { background: var(--red-light); color: var(--red); }
+    .bdg { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; background: var(--surface2); color: var(--text2); }
+    .bdg-접수 { background: var(--yellow-light); color: #b45309; } .bdg-확인중, .bdg-수리중 { background: var(--primary-light); color: var(--primary); }
+    .bdg-완료, .bdg-정상 { background: var(--green-light); color: var(--green); } .bdg-긴급, .bdg-고장 { background: var(--red-light); color: var(--red); }
+    .frow { display: flex; gap: 6px; overflow-x: auto; margin-bottom: 10px; scrollbar-width: none; padding-bottom: 2px; }
+    .frow::-webkit-scrollbar { display: none; }
+    .fchip { flex-shrink: 0; padding: 7px 14px; border-radius: 999px; font-size: 13.5px; font-weight: 600; border: 1px solid var(--border); background: var(--surface); color: var(--text3); cursor: pointer; white-space: nowrap; }
+    .fchip.on { background: var(--primary); border-color: var(--primary); color: #fff; }
+    .mstats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
+    .ms { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px 8px; text-align: center; box-shadow: var(--shadow); }
+    .ms-v { font-size: 24px; font-weight: 800; line-height: 1.15; } .ms-l { font-size: 12px; color: var(--text3); font-weight: 600; }
+    .ms-v.r { color: var(--red); } .ms-v.g { color: var(--green); } .ms-v.o { color: var(--yellow); }
+
+    /* 하단 시트 */
+    .ov { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, .4); z-index: 200; align-items: flex-end; justify-content: center; }
+    .ov.on { display: flex; }
+    .sheet { background: var(--surface); border-radius: 18px 18px 0 0; width: 100%; max-width: 520px; max-height: 92vh; overflow-y: auto; box-shadow: var(--shadow-md); padding-bottom: env(safe-area-inset-bottom, 0px); animation: sheetUp .25s cubic-bezier(.16, 1, .3, 1); }
+    @keyframes sheetUp { from { transform: translateY(30%); } to { transform: none; } }
+    .sh-handle { width: 40px; height: 5px; background: #cbd5e1; border-radius: 999px; margin: 10px auto 10px; }
+    .sh-title { font-size: 17px; font-weight: 700; padding: 0 18px 10px; }
+    .sh-body { padding: 4px 18px 10px; }
+    .sh-foot { position: sticky; bottom: 0; padding: 10px 18px 14px; display: flex; gap: 8px; background: var(--surface); border-top: 1px solid var(--border); }
+    .sh-foot .btn-p { flex: 2; } .sh-foot .btn-s { flex: 1; }
+    .kv { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 5px 10px; font-size: 14px; }
+    .kv dt { color: var(--text3); } .kv dd { margin: 0; font-weight: 600; word-break: break-all; }
+
+    .empty { text-align: center; padding: 34px 16px; color: var(--text3); font-size: 14px; }
+    .empty-ico { font-size: 30px; margin-bottom: 6px; }
+
+    /* QR로 고정된 설비 */
+    .equip-lock { display: none; gap: 12px; align-items: center; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 12px; margin-bottom: 10px; }
+    .equip-lock img { width: 64px; height: 64px; border-radius: 10px; object-fit: cover; flex-shrink: 0; border: 1px solid var(--border); }
+    .equip-lock-title { font-size: 15px; font-weight: 700; } .equip-lock-meta { font-size: 12.5px; color: var(--text3); line-height: 1.5; }
+    .badge-inline { display: inline-flex; padding: 2px 8px; border-radius: 999px; font-size: 11.5px; font-weight: 700; background: var(--primary-light); color: var(--primary); margin-top: 4px; }
+    #eqInfo { display: none; gap: 12px; align-items: center; margin-top: 2px; }
+    #eqImg { width: 64px; height: 64px; border-radius: 10px; object-fit: cover; display: none; flex-shrink: 0; border: 1px solid var(--border); }
+    .repeat-list { display: grid; gap: 7px; margin-top: 8px; }
+    .repeat-btn { width: 100%; text-align: left; border: 1px solid var(--border); background: var(--surface); border-radius: 12px; padding: 10px 12px; cursor: pointer; }
+    .repeat-btn:active { background: var(--surface2); }
+    .repeat-title { font-size: 14px; font-weight: 600; color: var(--text); } .repeat-meta { font-size: 12px; color: var(--text3); margin-top: 2px; }
+    details.adv summary { cursor: pointer; font-weight: 700; padding: 14px; list-style: none; display: flex; justify-content: space-between; }
+    details.adv summary::-webkit-details-marker { display: none; }
+    details.adv summary::after { content: "열기"; color: var(--primary); font-size: 13.5px; }
+    details.adv[open] summary::after { content: "닫기"; }
+    .reveal { animation: up .25s ease both; }
+    @keyframes up { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
   </style>
 </head>
 
 <body>
-  <div class="hd">
-    <div class="hd-top">
-      <div class="hd-logo">
-        <img src="ait-logo.png" style="height:32px;vertical-align:middle;margin-right:10px" />
-        설비 안돈 시스템
-      </div>
-      <div class="hd-sub">설비 이상 접수 · 조치 입력 · 이력 조회</div>
-      <div class="dot" id="dot"></div>
-    </div>
-
-    <div class="tabs">
-      <button class="tab on" onclick="go('reg', this)">📋 발생 등록</button>
-      <button class="tab" onclick="go('act', this)">✏️ 조치 입력</button>
-      <button class="tab" onclick="go('lkp', this)">🔍 이력 조회</button>
-      <button class="tab" style="white-space:normal;line-height:1.3" onclick="go('in', this)">📦 스페어<br>입고등록</button>
-      <button class="tab" onclick="goSet(this)">⚙️ 설정</button>
-    </div>
-  </div>
+  <header class="hd">
+    <div class="hd-logo"><img src="ait-logo.png" alt="AIT" />설비 안돈</div>
+    <div class="dot" id="dot" title="서버 연결"></div>
+  </header>
 
   <div class="body">
+    <div id="banner"></div>
     <div class="page on" id="page-reg">
       <div class="ok-screen" id="ok-scr">
-        <div class="ok-ico">✅</div>
+        <div class="ok-ico">✓</div>
         <div class="ok-title">접수 완료</div>
         <div class="ok-sub">신고가 정상 접수되었습니다.<br />담당자 확인 후 조치가 진행됩니다.</div>
         <div class="ok-no" id="ok-no">#—</div>
-        <button class="btn btn-p" style="max-width:220px;margin:0 auto" onclick="resetReg()">🔄 새 접수하기</button>
+        <button class="btn btn-p" style="max-width:240px;margin:0 auto" onclick="resetReg()">새 접수하기</button>
       </div>
 
       <div id="reg-form">
+        <div class="sh-h"><div class="row"><h1>고장 접수</h1><span>라인·설비·증상만 필수</span></div><div class="bar"><i id="regProg" style="width:0%"></i></div></div>
         <div class="equip-lock" id="equipLockBox">
           <img id="equipLockImg" src="" alt="설비 이미지" style="display:none" />
           <div style="flex:1; min-width:0;">
@@ -899,72 +219,73 @@
         </div>
 
         <div class="card" id="equipSelectCard">
-          <div class="card-h">📍 설비 선택</div>
           <div class="card-b">
             <div class="fg">
-              <label class="fl">라인 (설치소)</label>
-              <select class="fc" id="rLine" onchange="onLine()">
+              <div class="locked" id="rLineSum" style="display:none"><div><span>라인</span><b id="rLineSumV"></b></div><button type="button" onclick="editPick('line')">변경</button></div>
+              <div id="rLinePick"><label class="fl">라인 <span style="color:var(--red)">*</span></label><div class="tiles" id="rLineTiles"><span class="helper">설비 목록을 불러오는 중…</span></div></div>
+              <select class="fc mir-src" id="rLine" onchange="onLine()">
                 <option value="" disabled selected>라인을 선택하세요</option>
               </select>
             </div>
 
-            <div class="fg">
-              <label class="fl">설비</label>
-              <select class="fc" id="rEquip" disabled onchange="onEquip()">
+            <div class="fg" id="rEquipWrap" style="display:none">
+              <div id="rEquipPick"><label class="fl">설비 <span style="color:var(--red)">*</span></label><div id="rEquipList"></div></div>
+              <select class="fc mir-src" id="rEquip" disabled onchange="onEquip()">
                 <option value="" disabled selected>라인 먼저 선택</option>
               </select>
 
               <div id="eqInfo">
-                <img id="eqImg" src="" alt="equip" />
-                <div style="min-width:0;width:100%">
-                  <b id="eqName" style="display:block;font-size:15px;color:var(--text);margin-bottom:4px">—</b>
-                  <div style="color:var(--text3);line-height:1.6" id="eqMeta"></div>
+                <img id="eqImg" src="" alt="설비 사진" />
+                <div style="min-width:0;flex:1">
+                  <span style="display:block;font-size:12px;color:var(--text3)">설비</span>
+                  <b id="eqName" style="display:block;font-size:16px;color:var(--text)">—</b>
+                  <div style="font-size:12.5px;color:var(--text3);line-height:1.5" id="eqMeta"></div>
                 </div>
+                <button type="button" class="linkbtn" onclick="editPick('equip')">변경</button>
               </div>
             </div>
           </div>
         </div>
 
         <div class="card" id="repeatCard" style="display:none;">
-          <div class="card-h">🔁 같은 증상 재발 빠른 접수</div>
+          <div class="card-h">같은 증상 다시 접수 <span style="font-weight:500;font-size:12px;color:var(--text3)">최근 3건</span></div>
           <div class="card-b">
-            <div class="helper" style="margin-top:0">최근 이력 3건을 눌러 빠르게 증상을 채울 수 있습니다.</div>
             <div class="repeat-list" id="repeatList"></div>
           </div>
         </div>
 
-        <div class="card">
-          <div class="card-h">🚨 고장 내용</div>
-          <div class="card-b">
+        <div class="card reveal" id="regBody" style="display:none">
+          <div class="card-b" style="padding-top:14px">
             <div class="fg">
-              <label class="fl">유형</label>
+              <label class="fl">유형 <span style="color:var(--red)">*</span></label>
               <div class="chips" id="typeC">
-                <button type="button" class="chip c-설비고장 c-on" data-v="설비고장" onclick="selC(this,'t')">🔴 설비고장</button>
-                <button type="button" class="chip" data-v="부품불량" onclick="selC(this,'t')">⚙️ 부품불량</button>
-                <button type="button" class="chip" data-v="기타" onclick="selC(this,'t')">📋 기타</button>
+                <button type="button" class="chip c-설비고장 c-on" data-v="설비고장" onclick="selC(this,'t')">설비고장</button>
+                <button type="button" class="chip" data-v="부품불량" onclick="selC(this,'t')">부품불량</button>
+                <button type="button" class="chip" data-v="기타" onclick="selC(this,'t')">기타</button>
               </div>
             </div>
 
 
 
             <div class="fg">
-              <label class="fl">대표 증상 선택</label>
-              <select class="fc" id="rSymTag">
+              <label class="fl">대표 증상 <span style="color:var(--red)">*</span></label>
+              <div class="chips" id="rSymChips"></div>
+              <select class="fc mir-src" id="rSymTag">
                 <option value="" selected>대표 증상을 선택하세요</option>
               </select>
-              <div class="helper">지정된 목록 중 1개만 선택합니다.</div>
             </div>
 
             <div class="fg">
-              <label class="fl">상세 현상</label>
+              <label class="fl">상세 현상 <span style="font-weight:500;font-size:12px;color:var(--text3)">선택</span></label>
               <textarea class="fc" id="rSym"
                 placeholder="추가 설명이 있으면 입력하세요.&#10;예: 우측 실린더가 왕복 중 중간에서 멈춤 / 센서 청소 후 재발"></textarea>
             </div>
           </div>
         </div>
 
+        <div id="regTail" class="reveal" style="display:none">
         <div class="card">
-          <div class="card-h">📷 현장 사진 <span style="font-weight:500;color:var(--text3)">선택</span></div>
+          <div class="card-h">현장 사진 <span style="font-weight:500;font-size:12px;color:var(--text3)">선택</span></div>
           <div class="card-b">
             <div class="pz" onclick="document.getElementById('pInput').click()">
               <div class="pz-ico">📷</div>
@@ -978,11 +299,14 @@
           </div>
         </div>
 
-        <button class="btn btn-p" id="regBtn" onclick="submitReg()">📋 접수 저장</button>
+        <button class="btn btn-p" id="regBtn" onclick="openRegConfirm()">고장 접수</button>
+        <p class="helper" style="text-align:center">접수하면 담당자에게 알림이 갑니다.</p>
+        </div>
       </div>
     </div>
 
     <div class="page" id="page-act">
+      <div class="sh-h"><div class="row"><h1>조치 입력</h1><span id="actMeta"></span></div><div class="bar"><i></i></div></div>
       <!-- 통계 카드 -->
       <div class="mstats">
         <div class="ms">
@@ -991,7 +315,7 @@
         </div>
         <div class="ms">
           <div class="ms-v o" id="cOver">—</div>
-          <div class="ms-l">24h초과</div>
+          <div class="ms-l">24시간 초과</div>
         </div>
         <div class="ms">
           <div class="ms-v g" id="cDone">—</div>
@@ -1002,16 +326,16 @@
       <!-- 상태 필터 칩 -->
       <div class="frow" id="sfRow">
         <button class="fchip on" onclick="sflt('',this)">전체</button>
-        <button class="fchip" onclick="sflt('접수',this)">📥 접수</button>
-        <button class="fchip" onclick="sflt('확인중',this)">🔍 확인중</button>
-        <button class="fchip" onclick="sflt('수리중',this)">🔨 수리중</button>
-        <button class="fchip" onclick="sflt('완료',this)">✅ 완료</button>
+        <button class="fchip" onclick="sflt('접수',this)">접수</button>
+        <button class="fchip" onclick="sflt('확인중',this)">확인중</button>
+        <button class="fchip" onclick="sflt('수리중',this)">수리중</button>
+        <button class="fchip" onclick="sflt('완료',this)">완료</button>
       </div>
 
       <!-- 연/월 필터 -->
       <div style="display:flex;gap:8px;padding:0 0 10px;">
-        <select class="fc" id="actYear" onchange="renderAct()" style="flex:1;font-size:12px;padding:7px 10px;border-radius:6px;"></select>
-        <select class="fc" id="actMonth" onchange="renderAct()" style="flex:1;font-size:12px;padding:7px 10px;border-radius:6px;">
+        <select class="fc" id="actYear" onchange="renderAct()" style="flex:1;font-size:14px;padding:9px 10px"></select>
+        <select class="fc" id="actMonth" onchange="renderAct()" style="flex:1;font-size:14px;padding:9px 10px">
           <option value="">전체 월</option>
           <option value="01">1월</option><option value="02">2월</option><option value="03">3월</option>
           <option value="04">4월</option><option value="05">5월</option><option value="06">6월</option>
@@ -1029,11 +353,11 @@
     </div>
 
     <div class="page" id="page-in">
+      <div class="sh-h"><div class="row"><h1>스페어 입고</h1><span>부품·수량만 필수</span></div><div class="bar"><i></i></div></div>
       <div class="card">
-        <div class="card-h">📦 스페어 입고등록</div>
         <div class="card-b">
           <div class="fg">
-            <label class="fl">부품 검색 <span style="color:var(--red);font-size:9px">필수</span></label>
+            <label class="fl">부품 검색 <span style="color:var(--red)">*</span></label>
             <div style="position:relative;">
               <input class="fc" id="inPartSearch" placeholder="부품명, 규격, 코드 검색" oninput="searchInPart()" onfocus="searchInPart()" autocomplete="off" />
               <div id="inPartAc" style="position:absolute;top:100%;left:0;right:0;background:#fff;border:1px solid var(--border);border-radius:6px;max-height:200px;overflow-y:auto;z-index:100;display:none;box-shadow:var(--shadow);"></div>
@@ -1046,8 +370,8 @@
           </div>
 
           <div class="fg">
-            <label class="fl">입고 수량 <span style="color:var(--red);font-size:9px">필수</span></label>
-            <input class="fc" id="inQty" type="number" min="1" value="1" placeholder="수량 입력" />
+            <label class="fl">입고 수량 <span style="color:var(--red)">*</span></label>
+            <div class="stepper"><button type="button" onclick="stepQty(-1)" aria-label="1 줄이기">−</button><input class="fc" id="inQty" type="number" min="1" value="1" inputmode="numeric" aria-label="입고 수량" /><button type="button" onclick="stepQty(1)" aria-label="1 늘리기">+</button></div>
           </div>
 
           <div class="fg">
@@ -1060,27 +384,18 @@
             <input class="fc" id="inMemo" placeholder="예: 정기발주 입고, 긴급 구매" />
           </div>
 
-          <button class="btn btn-p" onclick="submitIn()">📦 입고 저장</button>
+          <button class="btn btn-p" onclick="submitIn()">입고 저장</button>
         </div>
       </div>
     </div>
 
     <div class="page" id="page-lkp">
-      <div class="card">
-        <div class="card-b" style="padding:12px 14px">
-          <div class="fg">
-            <label class="fl">라인 필터</label>
-            <select class="fc" id="lLine" onchange="loadLkp()">
-              <option value="">전체</option>
-            </select>
-          </div>
-
-          <div class="fg" style="margin-bottom:0">
-            <label class="fl">설비코드 / 설비명 검색</label>
-            <input class="fc" id="lQ" placeholder="검색어..." oninput="filterLkp()" />
-          </div>
-        </div>
-      </div>
+      <div class="sh-h"><div class="row"><h1>이력 조회</h1><span>설비별 고장·조치 이력</span></div><div class="bar"><i></i></div></div>
+      <input class="fc" id="lQ" placeholder="설비코드·설비명 검색" oninput="filterLkp()" style="margin-bottom:10px" />
+      <div class="frow" id="lLineChips"></div>
+      <select class="fc mir-src" id="lLine" onchange="loadLkp()">
+        <option value="">전체</option>
+      </select>
 
       <div id="lkpArea">
         <div class="empty">
@@ -1091,29 +406,10 @@
     </div>
 
     <div class="page" id="page-set">
-      <div class="card">
-        <div class="card-h">⚙️ 서버 연결</div>
-        <div class="card-b">
-          <div class="fg">
-            <label class="fl">Base URL</label>
-            <input class="fc" id="sUrl" placeholder="https://tpm.aitkorea.app/api" />
-            <div style="font-size:10px;color:var(--text3);margin-top:4px">
-              예: https://tpm.aitkorea.app/api
-            </div>
-          </div>
-
-          <div style="display:flex;gap:8px;margin-top:4px">
-            <button class="btn btn-p btn-sm" onclick="saveCfg()">💾 저장</button>
-            <button class="btn btn-s btn-sm" onclick="testConn()">🔌 테스트</button>
-          </div>
-
-          <div id="sRes" style="margin-top:8px;font-size:12px"></div>
-        </div>
-      </div>
-
+      <div class="sh-h"><div class="row"><h1>설정</h1><span></span></div><div class="bar"><i></i></div></div>
       <!-- 🔔 푸시 알람 카드 -->
-      <div class="card" style="margin-top:12px">
-        <div class="card-h">🔔 푸시 알람</div>
+      <div class="card">
+        <div class="card-h">고장 알림</div>
         <div class="card-b">
           <div style="font-size:12px;color:var(--text3);margin-bottom:10px">
             고장 접수 및 조치 완료 시 이 기기로 알림을 받습니다.
@@ -1137,13 +433,53 @@
           <div id="pushMsg" style="margin-top:8px;font-size:12px;color:var(--danger)"></div>
         </div>
       </div>
+      <details class="card adv">
+        <summary>고급 · 서버 주소</summary>
+        <div class="card-b">
+          <div class="fg">
+            <label class="fl">Base URL</label>
+            <input class="fc" id="sUrl" placeholder="https://tpm.aitkorea.app/api" />
+            <div style="font-size:10px;color:var(--text3);margin-top:4px">
+              예: https://tpm.aitkorea.app/api
+            </div>
+          </div>
+
+          <div style="display:flex;gap:8px;margin-top:4px">
+            <button class="btn btn-p btn-sm" onclick="saveCfg()">저장</button>
+            <button class="btn btn-s btn-sm" onclick="testConn()">연결 테스트</button>
+          </div>
+
+          <div id="sRes" style="margin-top:8px;font-size:12px"></div>
+        </div>
+      </details>
+
+    </div>
+  </div>
+
+  <nav class="tabs" aria-label="메뉴">
+    <button class="tab on" onclick="go('reg', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg><span>발생 등록</span></button>
+    <button class="tab" onclick="go('act', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/></svg><span>조치 입력</span></button>
+    <button class="tab" onclick="go('lkp', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><span>이력 조회</span></button>
+    <button class="tab" onclick="go('in', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8 12 3 3 8l9 5 9-5zM3 8v8l9 5 9-5V8M12 13v8"/></svg><span>스페어 입고</span></button>
+    <button class="tab" onclick="goSet(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></svg><span>설정</span></button>
+  </nav>
+
+  <div class="ov" id="regCfm" onclick="if (event.target === this) closeRegConfirm()">
+    <div class="sheet">
+      <div class="sh-handle"></div>
+      <div class="sh-title">이대로 접수할까요?</div>
+      <div class="sh-body"><dl class="kv" id="regCfmBody"></dl></div>
+      <div class="sh-foot">
+        <button class="btn btn-s" onclick="closeRegConfirm()">취소</button>
+        <button class="btn btn-p" onclick="closeRegConfirm(); submitReg()">접수하기</button>
+      </div>
     </div>
   </div>
 
   <div class="ov" id="actOv">
     <div class="sheet">
       <div class="sh-handle"></div>
-      <div class="sh-title" id="actTitle">✏️ 조치 입력</div>
+      <div class="sh-title" id="actTitle">조치 입력</div>
 
       <div class="sh-body">
         <input type="hidden" id="actRid" />
@@ -1173,8 +509,9 @@
         </div>
 
         <div class="fg">
-          <label class="fl">상태 변경</label>
-          <select class="fc" id="actSt">
+          <label class="fl">상태 <span style="color:var(--red)">*</span></label>
+          <div class="seg4" id="actStSeg"></div>
+          <select class="fc mir-src" id="actSt">
             <option value="">변경 안함</option>
             <option>접수</option>
             <option>확인중</option>
@@ -1200,8 +537,9 @@
         </div>
 
         <div class="fg">
-          <label class="fl">원인 대분류 <span style="color:var(--red);font-size:9px">필수</span></label>
-          <select class="fc" id="actCauseGroup" onchange="onCauseGroupChange()">
+          <label class="fl">원인 대분류 <span style="color:var(--red)">*</span></label>
+          <div class="tiles sm" id="actCgTiles"></div>
+          <select class="fc mir-src" id="actCauseGroup" onchange="onCauseGroupChange()">
             <option value="">-- 선택 --</option>
             <option>기계</option>
             <option>전기</option>
@@ -1216,8 +554,9 @@
         </div>
 
         <div class="fg">
-          <label class="fl">원인 소분류 <span style="color:var(--red);font-size:9px">필수</span></label>
-          <select class="fc" id="actCause">
+          <label class="fl">원인 소분류 <span style="color:var(--red)">*</span></label>
+          <div class="chips" id="actCauseChips"></div>
+          <select class="fc mir-src" id="actCause">
             <option value="">대분류 먼저 선택</option>
           </select>
         </div>
@@ -1231,7 +570,7 @@
           <label class="fl">조치 사진 <span style="color:var(--text3);font-size:9px">선택</span></label>
           <div class="pz" onclick="document.getElementById('actPhotoInput').click()" style="cursor:pointer;">
             <input type="file" id="actPhotoInput" accept="image/*" capture="environment" style="display:none" onchange="onActPhoto(this)" />
-            <div class="pz-txt" id="actPhotoTxt">📷 사진 촬영 / 파일 선택</div>
+            <div class="pz-txt" id="actPhotoTxt">사진 촬영 / 파일 선택</div>
             <img id="actPhotoPrev" class="photo-preview" alt="" style="display:none;" />
           </div>
           <div id="actUpSt" class="upst" style="display:none;margin-top:6px;"></div>
@@ -1255,7 +594,8 @@
         <div style="background:#fff5f5;border-radius:6px;padding:12px;margin-top:4px;display:flex;flex-direction:column;gap:10px;">
           <div class="fg" style="margin:0">
             <label class="fl">지연 분류 <span style="color:var(--red);font-size:9px">지연시 필수</span></label>
-            <select class="fc" id="actDlyCat">
+            <div class="chips" id="actDlyChips"></div>
+            <select class="fc mir-src" id="actDlyCat">
               <option value="">해당없음</option>
               <option>부품미입고</option>
               <option>외주대기</option>
@@ -1267,15 +607,15 @@
             </select>
           </div>
           <div class="fg" id="dlyReasonWrap" style="display:none;margin:0">
-            <label class="fl">지연 사유 상세 <span style="color:var(--red);font-size:9px">필수</span></label>
+            <label class="fl">지연 사유 상세 <span style="color:var(--red)">*</span></label>
             <input class="fc" id="actDlyReason" placeholder="구체적인 지연 사유를 입력하세요" />
           </div>
         </div>
       </div>
 
       <div class="sh-foot">
-        <button class="btn btn-p" onclick="submitAct()">📋 조치 저장</button>
         <button class="btn btn-s" onclick="closeAct()">취소</button>
+        <button class="btn btn-p" onclick="submitAct()">조치 저장</button>
       </div>
     </div>
   </div>
@@ -1681,8 +1021,7 @@
 
       document.getElementById("rSymTag").value = matchedTag || "";
       document.getElementById("rSym").value = symptomText;
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      alert("최근 증상을 불러왔습니다. 필요한 부분만 수정 후 접수하세요.");
+      showBanner("최근 증상을 불러왔습니다. 필요한 부분만 고친 뒤 접수하세요.");
     }
 
     function selC(el, group) {
@@ -1804,7 +1143,7 @@
         if (!d.success) {
           alert("접수 실패: " + (d.message || "알 수 없는 오류"));
           btn.disabled = false;
-          btn.textContent = "📋 접수 저장";
+          btn.textContent = "고장 접수";
           return;
         }
 
@@ -1814,7 +1153,7 @@
       } catch (e) {
         alert("접수 실패: " + e.message);
         btn.disabled = false;
-        btn.textContent = "📋 접수 저장";
+        btn.textContent = "고장 접수";
       }
     }
 
@@ -1839,7 +1178,7 @@
       document.getElementById("upSt").className = "upst";
       document.getElementById("upSt").textContent = "";
       document.getElementById("regBtn").disabled = false;
-      document.getElementById("regBtn").textContent = "📋 접수 저장";
+      document.getElementById("regBtn").textContent = "고장 접수";
       photoUrl = "";
 
       selType = "설비고장";
@@ -1948,7 +1287,7 @@
     async function openAct(rid, code) {
       document.getElementById("actRid").value = rid;
       document.getElementById("actCode").value = code;
-      document.getElementById("actTitle").textContent = `✏️ 조치 입력 — ${code}`;
+      document.getElementById("actTitle").textContent = code;
       document.getElementById("actSt").selectedIndex = 0;
       document.getElementById("actTech").value = "";
       document.getElementById("actDt").value = "";
@@ -2099,7 +1438,7 @@
         document.getElementById("inWorker").value = "";
         document.getElementById("inMemo").value = "";
         allPartsData = []; // 재고 갱신 위해 캐시 초기화
-        alert("✅ 입고 저장 완료");
+        showBanner("입고를 저장했습니다.");
       } catch (e) {
         alert("저장 실패: " + e.message);
       }
@@ -2366,7 +1705,7 @@
         }
 
         closeAct();
-        alert("✅ 조치 저장 완료");
+        showBanner("조치를 저장했습니다.");
         loadAct();
       } catch (e) {
         alert("저장 실패: " + e.message);
@@ -2676,6 +2015,117 @@
     }
 
     setTimeout(showFirstVisitPushPopup, 1500);
+
+    // ── 화면 보조 (adms-mobile 방식) ────────────────────────────
+    // 값과 저장·검증 로직은 원래 select가 그대로 갖는다. 여기서는 그 select를 큰 버튼으로 보여 주고,
+    // 고른 단계는 접고 다음 단계를 펼치기만 한다.
+    const $id = (id) => document.getElementById(id);
+    const escHtml = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const ui = { edit: "", symMore: false };
+
+    function showBanner(msg, tone = "ok") {
+      const b = $id("banner");
+      b.innerHTML = `<div class="banner ${tone}"><span>${escHtml(msg)}</span><button type="button" onclick="this.parentNode.remove()">닫기</button></div>`;
+      document.querySelector(".body").scrollTop = 0;
+      clearTimeout(showBanner.t);
+      showBanner.t = setTimeout(() => { b.innerHTML = ""; }, 5000);
+    }
+
+    function pickSelect(id, v) {
+      const sel = $id(id);
+      sel.value = v;
+      if (id === "rLine" || id === "rEquip") ui.edit = "";
+      sel.dispatchEvent(new Event("change", { bubbles: true }));
+      syncUI();
+    }
+
+    function editPick(which) { ui.edit = which; syncUI(); }
+
+    // select의 option을 버튼으로. withEmpty면 값이 빈 option(전체/해당없음)도 버튼으로 만든다.
+    function optionButtons(id, cls, withEmpty, label) {
+      const sel = $id(id);
+      return [...sel.options]
+        .filter((o) => !o.disabled && (withEmpty || o.value !== ""))
+        .map((o) => `<button type="button" class="${cls}" aria-pressed="${sel.value === o.value}" data-v="${escHtml(o.value)}" onclick="pickSelect('${id}', this.dataset.v)">${label ? label(o) : escHtml(o.textContent)}</button>`)
+        .join("");
+    }
+
+    function syncUI() {
+      const line = $id("rLine"), eq = $id("rEquip"), sym = $id("rSymTag");
+      const locked = !!lockedEquipCode;
+
+      // 라인: 고르면 한 줄 요약으로 접힌다
+      const lineDone = !!line.value && ui.edit !== "line";
+      $id("rLineSum").style.display = lineDone ? "flex" : "none";
+      $id("rLineSumV").textContent = line.value;
+      $id("rLinePick").style.display = lineDone ? "none" : "block";
+      if (!lineDone && line.options.length > 1) {
+        $id("rLineTiles").innerHTML = optionButtons("rLine", "tile", false,
+          (o) => `${escHtml(o.textContent)}<small>${equips.filter((e) => e.location === o.value).length}대</small>`);
+      }
+
+      // 설비: 라인을 고른 뒤에 나타나고, 고르면 사진·이름 요약(eqInfo)으로 접힌다
+      $id("rEquipWrap").style.display = line.value && ui.edit !== "line" ? "block" : "none";
+      const eqDone = !!eq.value && ui.edit !== "equip";
+      $id("rEquipPick").style.display = eqDone ? "none" : "block";
+      if (!eqDone) {
+        $id("rEquipList").innerHTML = optionButtons("rEquip", "eqbtn", false, (o) => {
+          const [code, ...rest] = o.textContent.split(" — ");
+          return `<div><b>${escHtml(code)}</b><span>${escHtml(rest.join(" — "))}</span></div>`;
+        });
+      }
+      if (!locked) $id("eqInfo").style.display = eqDone ? "flex" : "none";
+
+      // 대표 증상: 자주 쓰는 8개 + 더보기 (고른 것은 항상 보임)
+      const opts = [...sym.options].filter((o) => o.value);
+      const shown = ui.symMore ? opts : opts.filter((o, i) => i < 8 || o.value === sym.value);
+      $id("rSymChips").innerHTML = shown.map((o) =>
+        `<button type="button" class="mchip" aria-pressed="${sym.value === o.value}" data-v="${escHtml(o.value)}" onclick="pickSelect('rSymTag', this.dataset.v)">${escHtml(o.textContent)}</button>`).join("") +
+        (shown.length < opts.length ? `<button type="button" class="mchip more" onclick="ui.symMore = true; syncUI()">더보기 +${opts.length - shown.length}</button>` : "");
+
+      // 단계별로 펼치기 + 진행 줄
+      const hasEq = locked || !!eq.value;
+      const hasSym = !!sym.value || !!$id("rSym").value.trim();
+      $id("regBody").style.display = hasEq ? "block" : "none";
+      $id("regTail").style.display = hasEq && hasSym ? "block" : "none";
+      $id("regProg").style.width = `${([locked || !!line.value, hasEq, hasSym].filter(Boolean).length / 3) * 100}%`;
+
+      // 조치 시트: 상태 4단계, 원인 대분류 버튼, 소분류·지연 분류 칩
+      const st = $id("actSt"), order = ["접수", "확인중", "수리중", "완료"];
+      $id("actStSeg").innerHTML = order.map((v, i) =>
+        `<button type="button" class="${order.indexOf(st.value) > i ? "past" : ""}" aria-pressed="${st.value === v}" onclick="pickSelect('actSt', '${v}')">${v}</button>`).join("");
+      $id("actCgTiles").innerHTML = optionButtons("actCauseGroup", "tile", false);
+      $id("actCauseChips").innerHTML = $id("actCauseGroup").value ? optionButtons("actCause", "mchip", false) : '<span class="helper" style="margin:0">대분류를 먼저 고르세요.</span>';
+      $id("actDlyChips").innerHTML = optionButtons("actDlyCat", "mchip", true);
+
+      // 이력 조회 라인 칩, 조치 입력 요약
+      $id("lLineChips").innerHTML = optionButtons("lLine", "fchip", true);
+      $id("actMeta").textContent = `미완료 ${$id("cOpen").textContent} · 24시간 초과 ${$id("cOver").textContent}`;
+    }
+
+    function openRegConfirm() {
+      const code = lockedEquipCode || $id("rEquip").value;
+      const tag = $id("rSymTag").value, detail = $id("rSym").value.trim();
+      if (!code || !(tag || detail)) return submitReg(); // 빠진 항목은 기존 안내 그대로
+      const e = equips.find((x) => x.equip_code === code) || {};
+      $id("regCfmBody").innerHTML =
+        `<dt>설비</dt><dd>${escHtml(code)}<br><span style="font-weight:400;color:var(--text3)">${escHtml(e.equip_name || "")}</span></dd>` +
+        `<dt>유형</dt><dd>${escHtml(selType)}</dd><dt>증상</dt><dd>${escHtml([tag, detail].filter(Boolean).join(" / "))}</dd>` +
+        `<dt>사진</dt><dd>${photoUrl ? "1장" : "없음"}</dd>`;
+      $id("regCfm").classList.add("on");
+    }
+    function closeRegConfirm() { $id("regCfm").classList.remove("on"); }
+
+    function stepQty(d) {
+      const q = $id("inQty");
+      q.value = Math.max(1, (parseInt(q.value, 10) || 0) + d);
+    }
+
+    // 원래 코드가 select·숫자를 바꾼 뒤에도 버튼이 따라가게: 사용자 동작 직후와 select 내용이 바뀔 때 다시 그린다
+    ["click", "change", "input"].forEach((t) => document.addEventListener(t, () => setTimeout(syncUI, 0)));
+    const _mo = new MutationObserver(() => syncUI());
+    ["rLine", "rEquip", "rSymTag", "actCause", "lLine", "cOpen", "cOver"].forEach((id) => _mo.observe($id(id), { childList: true, attributes: true, characterData: true, subtree: true }));
+    syncUI();
   </script>
 
   <!-- 첫 방문 푸시 알람 팝업 -->
