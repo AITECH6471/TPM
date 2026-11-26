@@ -1,10 +1,5 @@
 ﻿import { state, CACHE_KEYS, $, pick, num, escapeHtml, formatDate, ensureSelectValue, normalizeStatus, saveCache, loadCache, getRows, apiFirst, uploadPhoto, renderStatusBadge, hoursSince } from './core.js';
 
-function priorityBadge(priority) {
-  const p = String(priority || '').trim();
-  const cls = p === '긴급' ? 'priority-urgent' : p === '보통' ? 'priority-normal' : p === '낮음' ? 'priority-low' : 'muted';
-  return `<span class="badge ${cls}">${escapeHtml(p || '-')}</span>`;
-}
 import { openModal, closeModal } from './ui.js';
 import { loadDashboard } from './dashboard.js';
 
@@ -105,10 +100,7 @@ export function renderReportBoard() {
     if (body) {
       body.innerHTML = rows.map((row) => `
         <div class="kanban-card" onclick="openReportModal(${Number(pick(row.report_id, row.id, 0))})">
-          <div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start">
-            <div style="font-weight:800">${escapeHtml(pick(row.equip_code))}</div>
-            ${priorityBadge(pick(row.priority, '-'))}
-          </div>
+          <div style="font-weight:800">${escapeHtml(pick(row.equip_code))}</div>
           <div style="margin-top:6px;font-size:13px">${escapeHtml(pick(row.symptom, row.title, row.report_title))}</div>
           <div style="margin-top:8px;font-size:11px;color:var(--text3)">${escapeHtml(pick(row.location, '-'))} / ${escapeHtml(formatDate(pick(row.report_dt, row.created_at)))}</div>
         </div>`).join('') || '<div style="color:var(--text3);font-size:12px;padding:8px">없음</div>';
@@ -122,6 +114,7 @@ export function syncReportPhotoPreview() {
   const img = $('rep-photo-previewimg');
   const ph = $('rep-photo-placeholder');
   const btn = $('btn-remove-rep-photo');
+  if (!img) return; // 상세 모달이 보기 전용으로 바뀌어 미리보기 칸이 없음
   if (url) { img.src = url; img.style.display = ''; ph.style.display = 'none'; btn.style.display = ''; }
   else { img.removeAttribute('src'); img.style.display = 'none'; ph.style.display = ''; btn.style.display = 'none'; }
 }
@@ -156,7 +149,7 @@ export function openReportModal(reportId) {
       <tbody>
         <tr style="border-bottom:1px solid var(--border)"><td style="padding:8px 12px;color:var(--text3);width:25%;white-space:nowrap">설비코드</td><td style="padding:8px 12px;font-weight:600">${escapeHtml(pick(row.equip_code, '-'))}</td><td style="padding:8px 12px;color:var(--text3);width:25%;white-space:nowrap">설비명</td><td style="padding:8px 12px">${escapeHtml(pick(row.equip_name, '-'))}</td></tr>
         <tr style="border-bottom:1px solid var(--border)"><td style="padding:8px 12px;color:var(--text3)">설치소</td><td style="padding:8px 12px">${escapeHtml(pick(row.location, '-'))}</td><td style="padding:8px 12px;color:var(--text3)">접수일시</td><td style="padding:8px 12px">${escapeHtml(pick(row.report_dt, row.created_at, '-'))}</td></tr>
-        <tr style="border-bottom:1px solid var(--border)"><td style="padding:8px 12px;color:var(--text3)">유형</td><td style="padding:8px 12px">${escapeHtml(pick(row.report_type, '-'))}</td><td style="padding:8px 12px;color:var(--text3)">우선순위</td><td style="padding:8px 12px">${priorityBadge(pick(row.priority))}</td></tr>
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:8px 12px;color:var(--text3)">유형</td><td style="padding:8px 12px" colspan="3">${escapeHtml(pick(row.report_type, '-'))}</td></tr>
         <tr style="border-bottom:1px solid var(--border)"><td style="padding:8px 12px;color:var(--text3)">상태</td><td style="padding:8px 12px">${renderStatusBadge(pick(row.status, '-'))}</td><td style="padding:8px 12px;color:var(--text3)">신고자</td><td style="padding:8px 12px">${escapeHtml(pick(row.reporter, '-'))}</td></tr>
         <tr style="border-bottom:1px solid var(--border)"><td style="padding:8px 12px;color:var(--text3)">라인 영향</td><td colspan="3" style="padding:8px 12px">${escapeHtml(pick(row.line_impact, '-'))}</td></tr>
         <tr><td style="padding:8px 12px;color:var(--text3)">증상</td><td colspan="3" style="padding:8px 12px;font-weight:600">${escapeHtml(pick(row.symptom, row.title, row.report_title, row.report_text, '-'))}</td></tr>
