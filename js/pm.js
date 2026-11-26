@@ -241,7 +241,7 @@ export function editPMMasterItem(id) {
   const photoUrl = pick(row.criteria_photo, '');
   if ($('pm-master-photo-url')) $('pm-master-photo-url').value = photoUrl;
   const preview = $('pm-master-photo-preview');
-  if (preview) preview.innerHTML = photoUrl ? `<img src="${escapeHtml(photoUrl)}" style="max-height:80px;border-radius:6px;border:1px solid var(--border)">` : '';
+  if (preview) preview.innerHTML = photoUrl ? `<img src="${escapeHtml(photoUrl)}" style="max-height:80px;border-radius:2px;border:1px solid var(--border)">` : '';
   if ($('pm-master-photo-status')) $('pm-master-photo-status').textContent = photoUrl ? '사진 등록됨' : '';
 }
 
@@ -505,7 +505,7 @@ export function renderPMPlanMonthGrid() {
   grid.innerHTML = Array.from({ length: 12 }, (_, i) => {
     const val = (row && row[`m${i + 1}`]) || '0';
     const icon = icons[val] || '⚪';
-    return `<div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px;border:1px solid var(--border);border-radius:12px;background:var(--surface2)">
+    return `<div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px;border:1px solid var(--border);border-radius:2px;background:var(--surface2)">
       <span style="font-size:13px;font-weight:700">${i + 1}월</span>
       <button class="pm-status-btn" data-pm-plan-month="${i + 1}" data-status="${escapeHtml(val)}" onclick="cyclePMStatus(this)" title="${labels[val] || ''}" style="background:none;border:none;cursor:pointer;font-size:26px;padding:4px">${icon}</button>
       <span class="pm-edit-label" style="font-size:11px;color:var(--text3)">${labels[val] || '미계획'}</span>
@@ -741,7 +741,7 @@ export function openPMEdit(id) {
   $('pm-month-grid').innerHTML = Array.from({ length: 12 }, (_, i) => {
     const val = row[`m${i + 1}`] || '0';
     const icon = icons[val] || '⚪';
-    return `<div style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px;border:1px solid var(--border);border-radius:12px;background:var(--surface2)">
+    return `<div style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px;border:1px solid var(--border);border-radius:2px;background:var(--surface2)">
       <span style="font-size:12px;font-weight:600">${i + 1}월</span>
       <button class="pm-status-btn" data-pm-edit-month="${i + 1}" data-status="${escapeHtml(val)}" onclick="cyclePMStatus(this)" title="${labels[val] || ''}" style="background:none;border:none;cursor:pointer;font-size:22px;padding:4px">${icon}</button>
       <span class="pm-edit-label" style="font-size:10px;color:var(--text3)">${labels[val] || '미계획'}</span>
@@ -904,7 +904,7 @@ export function openChecksheetMonthDetail(checkMonth) {
   } else {
     const inspector = allResults.find((r) => r.inspector)?.inspector || '—';
     const inspectDate = allResults.find((r) => r.inspect_date)?.inspect_date || '—';
-    body.innerHTML = `<div style="padding:10px 14px;background:var(--surface2);margin-bottom:12px;border-radius:6px;font-size:12px;display:flex;gap:20px">
+    body.innerHTML = `<div style="padding:10px 14px;background:var(--surface2);margin-bottom:12px;border-radius:2px;font-size:12px;display:flex;gap:20px">
       <span>담당자: <strong>${escapeHtml(inspector)}</strong></span>
       <span>점검일: <strong>${String(inspectDate).slice(0, 10)}</strong></span>
     </div>
@@ -1176,8 +1176,8 @@ export function openPMResultEntry(pmMasterId, inputType, monthKey, itemName) {
     if (inputType === 'PASS_FAIL') {
       inputArea.innerHTML = `<div style="margin-bottom:4px;font-size:12px;font-weight:700;color:var(--text2)">점검 결과</div>
         <div style="display:flex;gap:12px;justify-content:center;margin:12px 0" id="pre-pf-btns">
-          <button id="pre-btn-pass" onclick="setPMEntryResult('P')" style="font-size:32px;padding:14px 28px;border:2px solid var(--border);border-radius:12px;background:var(--surface2);cursor:pointer;transition:all 0.15s">⭕</button>
-          <button id="pre-btn-fail" onclick="setPMEntryResult('F')" style="font-size:32px;padding:14px 28px;border:2px solid var(--border);border-radius:12px;background:var(--surface2);cursor:pointer;transition:all 0.15s">❌</button>
+          <button id="pre-btn-pass" onclick="setPMEntryResult('P')" style="font-size:32px;padding:14px 28px;border:2px solid var(--border);border-radius:2px;background:var(--surface2);cursor:pointer;transition:all 0.15s">⭕</button>
+          <button id="pre-btn-fail" onclick="setPMEntryResult('F')" style="font-size:32px;padding:14px 28px;border:2px solid var(--border);border-radius:2px;background:var(--surface2);cursor:pointer;transition:all 0.15s">❌</button>
         </div>
         <input type="hidden" id="pre-slide-val" value="" />`;
     } else {
@@ -1370,7 +1370,7 @@ export async function uploadPMItemPhoto(input, targetId) {
     if (targetEl) targetEl.value = url || '';
     const preview = $('pm-master-photo-preview');
     if (preview && targetId === 'pm-master-photo-url') {
-      preview.innerHTML = url ? `<img src="${escapeHtml(url)}" style="max-height:80px;border-radius:6px;border:1px solid var(--border)">` : '';
+      preview.innerHTML = url ? `<img src="${escapeHtml(url)}" style="max-height:80px;border-radius:2px;border:1px solid var(--border)">` : '';
     }
     if ($('pm-master-photo-status')) $('pm-master-photo-status').textContent = url ? '✅ 업로드 완료' : '업로드 실패';
     else if ($('pmi-add-status')) $('pmi-add-status').textContent = url ? '✅ 사진 업로드 완료' : '업로드 실패';

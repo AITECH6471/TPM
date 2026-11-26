@@ -133,7 +133,7 @@ export async function openEquipDetail(equipCode) {
     $('modal-equip-title').textContent = `${pick(equipmentData.equip_name, equipmentData.name, equipCode)} 상세`;
     const photoUrl = normalizeDriveUrl(pick(equipmentData.photo_url, equipmentData.image_url));
     $('modal-equip-info').innerHTML = `
-      <div style="width:100%;max-height:280px;border:1px solid var(--border);border-radius:16px;background:var(--surface2);display:flex;align-items:center;justify-content:center;overflow:hidden;margin-bottom:16px">
+      <div style="width:100%;max-height:280px;border:1px solid var(--border);border-radius:2px;background:var(--surface2);display:flex;align-items:center;justify-content:center;overflow:hidden;margin-bottom:16px">
         ${photoUrl ? `<img src="${escapeHtml(photoUrl)}" alt="설비 사진" onerror="driveImgFallback(this)" style="width:100%;max-height:280px;object-fit:contain">` : '<span style="font-size:14px;color:var(--text3);padding:40px">사진 없음</span>'}
       </div>
       <table style="width:100%;border-collapse:collapse;font-size:14px">
@@ -199,7 +199,7 @@ export async function openEquipDetail(equipCode) {
           <td style="text-align:center">
             ${validP
               ? `<img src="${escapeHtml(p)}" onclick="openPhotoModal('${escapeHtml(p)}')" onerror="driveImgFallback(this)"
-                   style="width:140px;height:140px;object-fit:cover;border-radius:10px;border:1px solid var(--border);cursor:zoom-in" />`
+                   style="width:140px;height:140px;object-fit:cover;border-radius:2px;border:1px solid var(--border);cursor:zoom-in" />`
               : `<span style="color:var(--text3);font-size:11px">없음</span>`}
           </td>
           <td>${escapeHtml(item.sub_code)}</td>
@@ -482,17 +482,17 @@ export function openHistorySlideOver(idx) {
         <div style="font-size:11px;font-weight:600;color:var(--text3);margin-bottom:4px;text-align:center">📷 고장접수 사진</div>
         ${rp
           ? `<a href="${escapeHtml(rp)}" target="_blank" rel="noopener noreferrer">
-               <img src="${escapeHtml(rp)}" onerror="driveImgFallback(this)" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:10px;border:1px solid var(--border,#e5e7eb);display:block;" />
+               <img src="${escapeHtml(rp)}" onerror="driveImgFallback(this)" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:2px;border:1px solid var(--border,#e5e7eb);display:block;" />
              </a>`
-          : `<div style="width:100%;aspect-ratio:4/3;background:#f3f4f6;border-radius:10px;border:1px solid var(--border,#e5e7eb);display:flex;align-items:center;justify-content:center;font-size:11px;color:#9ca3af">없음</div>`}
+          : `<div style="width:100%;aspect-ratio:4/3;background:#f3f4f6;border-radius:2px;border:1px solid var(--border,#e5e7eb);display:flex;align-items:center;justify-content:center;font-size:11px;color:#9ca3af">없음</div>`}
       </div>
       <div>
         <div style="font-size:11px;font-weight:600;color:var(--text3);margin-bottom:4px;text-align:center">🔧 조치 사진</div>
         ${ap
           ? `<a href="${escapeHtml(ap)}" target="_blank" rel="noopener noreferrer">
-               <img src="${escapeHtml(ap)}" onerror="driveImgFallback(this)" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:10px;border:1px solid var(--border,#e5e7eb);display:block;" />
+               <img src="${escapeHtml(ap)}" onerror="driveImgFallback(this)" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:2px;border:1px solid var(--border,#e5e7eb);display:block;" />
              </a>`
-          : `<div style="width:100%;aspect-ratio:4/3;background:#f3f4f6;border-radius:10px;border:1px solid var(--border,#e5e7eb);display:flex;align-items:center;justify-content:center;font-size:11px;color:#9ca3af">없음</div>`}
+          : `<div style="width:100%;aspect-ratio:4/3;background:#f3f4f6;border-radius:2px;border:1px solid var(--border,#e5e7eb);display:flex;align-items:center;justify-content:center;font-size:11px;color:#9ca3af">없음</div>`}
       </div>
     </div>` : '';
 
@@ -612,11 +612,11 @@ export function showQR(code, name) {
     <div style="background:#fff;border-radius:20px;padding:32px 28px;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,0.25);min-width:300px">
       <div style="font-size:13px;color:#64748b;margin-bottom:4px">${escapeHtml(code)}</div>
       <div style="font-size:17px;font-weight:700;margin-bottom:18px">${escapeHtml(name)}</div>
-      <canvas id="_qr_canvas" style="border-radius:8px;display:block;margin:0 auto"></canvas>
+      <canvas id="_qr_canvas" style="border-radius:2px;display:block;margin:0 auto"></canvas>
       <div style="font-size:10px;color:#94a3b8;margin-top:10px;word-break:break-all">${url}</div>
       <div style="display:flex;gap:10px;margin-top:18px;justify-content:center">
-        <button id="_qr_save_btn" style="padding:8px 18px;border-radius:8px;border:1px solid #e2e8f0;background:#f8fafc;cursor:pointer;font-size:13px">🖨️ 이미지 저장</button>
-        <button onclick="document.getElementById('_qr_overlay').remove()" style="padding:8px 18px;border-radius:8px;border:none;background:#1d4ed8;color:#fff;cursor:pointer;font-size:13px">닫기</button>
+        <button id="_qr_save_btn" style="padding:8px 18px;border-radius:2px;border:1px solid #e2e8f0;background:#f8fafc;cursor:pointer;font-size:13px">🖨️ 이미지 저장</button>
+        <button onclick="document.getElementById('_qr_overlay').remove()" style="padding:8px 18px;border-radius:2px;border:none;background:#1d4ed8;color:#fff;cursor:pointer;font-size:13px">닫기</button>
       </div>
     </div>`;
 
@@ -673,7 +673,7 @@ export async function loadEquipSubItems(equipCode) {
     }
     const noPhotoCount = items.filter(i => !normalizeDriveUrl(pick(i.photo_url, ''))).length;
     const warningBanner = noPhotoCount > 0
-      ? `<div style="background:#fef3c7;border:1px solid #f59e0b;border-radius:8px;padding:8px 12px;margin-bottom:8px;font-size:12px;color:#92400e">
+      ? `<div style="background:#fef3c7;border:1px solid #f59e0b;border-radius:2px;padding:8px 12px;margin-bottom:8px;font-size:12px;color:#92400e">
            ⚠️ 사진 없는 항목 <strong>${noPhotoCount}건</strong> — 📷 버튼을 눌러 사진을 등록해주세요.
          </div>` : '';
     listEl.innerHTML = warningBanner + `<table style="width:100%;border-collapse:collapse;font-size:12px">
@@ -694,7 +694,7 @@ export async function loadEquipSubItems(equipCode) {
           <td style="padding:4px 8px;text-align:center">
             ${validPhoto
               ? `<img src="${escapeHtml(photo)}" onclick="openPhotoModal('${escapeHtml(photo)}')" onerror="driveImgFallback(this)"
-                   style="width:140px;height:140px;object-fit:cover;border-radius:10px;border:1px solid var(--border);cursor:zoom-in" />`
+                   style="width:140px;height:140px;object-fit:cover;border-radius:2px;border:1px solid var(--border);cursor:zoom-in" />`
               : `<div>
                    <input type="file" id="sub-photo-input-${num(item.id)}" style="display:none" accept="image/*"
                      onchange="updateSubItemPhoto(${num(item.id)},'${escapeHtml(equipCode)}',this)" />

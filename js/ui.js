@@ -19,7 +19,8 @@ export function closeModal(id) {
 export function updatePageTitle() {
   const activeNav = document.querySelector('.nav-item.active');
   const title = $('page-title');
-  if (activeNav && title) title.textContent = activeNav.textContent.trim().replace(/\s+/g, ' ');
+  const label = activeNav?.querySelector('span:not(.nav-icon):not(.badge)'); // 메뉴 옆 숫자 배지는 제목에서 뺀다
+  if (label && title) title.textContent = label.textContent.trim().replace(/\s+/g, ' ');
 }
 
 export function showPage(pageId) {

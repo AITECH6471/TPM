@@ -6,9 +6,7 @@
     <title>설비 관리시스템</title>
     <link rel="icon" href="data:,">
     <meta name="description" content="설비 이상 발생 및 조치 관리 시스템" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
     <link rel="stylesheet" href="style.css" />
@@ -24,34 +22,34 @@
           <div class="sidebar-nav">
             <div class="nav-section">MAIN</div>
             <div class="nav-item active" onclick="showPage('page-dashboard')">
-              <span class="nav-icon">📊</span>
+              <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg></span>
               <span>대시보드</span>
             </div>
             <div class="nav-item" onclick="showPage('page-equip-list')">
-              <span class="nav-icon">🏭</span>
+              <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 20h20M4 20V9l5 3V9l5 3V5l6 4v11"/></svg></span>
               <span>설비 목록</span>
             </div>
             <div class="nav-item" onclick="showPage('page-spare-parts')">
-              <span class="nav-icon">⚙️</span>
+              <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8l-9-5-9 5 9 5 9-5zM3 8v8l9 5 9-5V8M12 13v8"/></svg></span>
               <span>스페어 파트</span>
             </div>
             <div class="nav-section">MANAGEMENT</div>
             <div class="nav-item" onclick="showPage('page-reports')">
-              <span class="nav-icon">📋</span>
+              <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4M12 17h.01M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></span>
               <span>고장접수 관리</span>
               <span class="badge" id="badge-open">0</span>
             </div>
             <div class="nav-item" onclick="showPage('page-pm-plan')">
-              <span class="nav-icon">📅</span>
+              <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18"/><path d="M16 2v4M8 2v4M3 10h18M9 16l2 2 4-4"/></svg></span>
               <span>정기점검 관리</span>
             </div>
             <div class="nav-section">SYSTEM</div>
             <div class="nav-item" onclick="showPage('page-stats')">
-              <span class="nav-icon">📈</span>
+              <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18M7 16v-5M12 16V7M17 16v-3"/></svg></span>
               <span>통계 / MTTR</span>
             </div>
             <div class="nav-item" onclick="showPage('page-config')">
-              <span class="nav-icon">⚙️</span>
+              <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></span>
               <span>설정</span>
             </div>
           </div>
@@ -64,7 +62,7 @@
               </div>
               <span id="conn-text">연결 확인 중...</span>
             </div>
-            <button class="btn btn-sm btn-secondary" onclick="refreshCurrent()">🔄 새로고침</button>
+            <button class="btn btn-sm btn-secondary" onclick="refreshCurrent()">새로고침</button>
           </div>
           <div class="content">
             <!-- DASHBOARD -->
@@ -259,7 +257,7 @@
                   <div class="card" style="text-align:center;padding:14px 10px;position:relative">
                     <div style="font-size:11px;color:var(--text3);margin-bottom:4px">완료</div>
                     <div id="rp-stat-done" style="font-size:26px;font-weight:900;color:#16a34a">0</div>
-                    <div style="position:absolute;top:8px;right:10px;background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:2px 8px;font-size:11px;font-weight:700;color:#16a34a;line-height:1.6" id="rp-stat-rate">0%</div>
+                    <div style="position:absolute;top:8px;right:10px;background:#f0fdf4;border:1px solid #86efac;border-radius:2px;padding:2px 8px;font-size:11px;font-weight:700;color:#16a34a;line-height:1.6" id="rp-stat-rate">0%</div>
                   </div>
                 </div>
               </div>
@@ -386,7 +384,7 @@
               <button class="btn btn-primary" id="pm-checksheet-btn" onclick="openPMChecksheet()" style="padding:16px 8px;font-size:13px;display:flex;flex-direction:column;align-items:center;gap:6px">
                 <span style="font-size:22px">✏️</span><span>체크시트입력</span>
               </button>
-              <button class="btn" onclick="openPMHistoryModal()" style="padding:16px 8px;font-size:13px;background:#546e7a;color:#fff;border:none;border-radius:8px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px">
+              <button class="btn" onclick="openPMHistoryModal()" style="padding:16px 8px;font-size:13px;background:#546e7a;color:#fff;border:none;border-radius:2px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px">
                 <span style="font-size:22px">📂</span><span>이력조회</span>
               </button>
             </div>
@@ -593,7 +591,7 @@
       <button class="close-modal" onclick="closeModal('modal-pm-copy')">×</button>
     </div>
     <div class="modal-body">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;padding:10px 14px;background:var(--surface2);border-radius:8px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;padding:10px 14px;background:var(--surface2);border-radius:2px">
         <span style="font-size:12px;color:var(--text3)">복사 대상:</span>
         <span id="copy-dst-label" style="font-weight:700;font-size:14px"></span>
       </div>
@@ -603,7 +601,7 @@
           <option value="">-- 원본 설비 선택 --</option>
         </select>
       </div>
-      <div id="copy-preview" style="max-height:300px;overflow-y:auto;border:1px solid var(--border);border-radius:6px;font-size:12px"></div>
+      <div id="copy-preview" style="max-height:300px;overflow-y:auto;border:1px solid var(--border);border-radius:2px;font-size:12px"></div>
     </div>
     <div class="modal-footer">
       <span id="copy-status" style="font-size:12px;color:var(--text3);flex:1"></span>
@@ -654,7 +652,7 @@
   <div class="form-group" style="margin-top:16px">
     <label class="form-label">기준 사진</label>
     <div style="display:flex;align-items:center;gap:10px;margin-top:6px">
-      <label style="cursor:pointer;padding:6px 12px;border:1px solid var(--border);border-radius:6px;font-size:12px;background:var(--surface2)">
+      <label style="cursor:pointer;padding:6px 12px;border:1px solid var(--border);border-radius:2px;font-size:12px;background:var(--surface2)">
         📷 사진 선택
         <input type="file" id="pm-master-photo-input" accept="image/*" style="display:none" onchange="uploadPMItemPhoto(this,'pm-master-photo-url')">
       </label>
@@ -678,7 +676,7 @@
       <button class="close-modal" onclick="closeModal('modal-pm-checksheet')">×</button>
     </div>
     <div class="modal-body">
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px;padding:12px;background:var(--surface2);border-radius:10px;border:1px solid var(--border)">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px;padding:12px;background:var(--surface2);border-radius:2px;border:1px solid var(--border)">
         <div>
           <div style="font-size:11px;color:var(--text3);margin-bottom:3px">설비</div>
           <div id="pmc-equip-label" style="font-weight:700;font-size:13px">—</div>
@@ -803,7 +801,7 @@
   <div class="modal" style="max-width:920px;width:95vw">
     <div class="modal-header">
       <div style="display:flex;align-items:center;gap:10px">
-        <button id="pmh-back-btn" onclick="showPMHistoryList()" style="display:none;background:none;border:1px solid var(--border);border-radius:6px;padding:4px 10px;cursor:pointer;font-size:12px">← 목록</button>
+        <button id="pmh-back-btn" onclick="showPMHistoryList()" style="display:none;background:none;border:1px solid var(--border);border-radius:2px;padding:4px 10px;cursor:pointer;font-size:12px">← 목록</button>
         <h2 id="pmh-title">📂 점검 이력</h2>
       </div>
       <button class="close-modal" onclick="closeModal('modal-pm-history')">×</button>
@@ -817,7 +815,7 @@
       </div>
       <!-- 상세 뷰 -->
       <div id="pmh-detail-view" style="display:none;padding:16px">
-        <div id="pmh-detail-header" style="padding:10px 14px;background:var(--surface2);border-radius:8px;margin-bottom:14px;font-size:13px;display:flex;gap:24px"></div>
+        <div id="pmh-detail-header" style="padding:10px 14px;background:var(--surface2);border-radius:2px;margin-bottom:14px;font-size:13px;display:flex;gap:24px"></div>
         <div id="pmh-detail-body"></div>
       </div>
     </div>
@@ -836,7 +834,7 @@
     <div class="modal-body">
       <input type="hidden" id="pmre-id">
       <input type="hidden" id="pmre-input-type">
-      <div style="padding:10px 12px;background:var(--surface2);border-radius:8px;margin-bottom:14px;font-size:12px">
+      <div style="padding:10px 12px;background:var(--surface2);border-radius:2px;margin-bottom:14px;font-size:12px">
         <span id="pmre-item-label" style="font-weight:700;color:var(--text2)"></span>
       </div>
       <div class="form-row cols-2">
@@ -1064,7 +1062,7 @@
       <textarea class="form-control" id="form-eq-spec" placeholder="기타 사양 정보">
       </textarea>
     </div>
-    <div style="margin-top:24px; padding:18px; background:var(--surface2); border-radius:16px; border:1px solid var(--border);">
+    <div style="margin-top:24px; padding:18px; background:var(--surface2); border-radius:2px; border:1px solid var(--border);">
       <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:10px;">
         <span style="font-weight:800; font-size:20px">📋 설비 중요도 평가 (11개 지표)</span>
         <span id="form-total-score-badge" class="badge grade-D" style="margin-left:0; font-size:20px; padding:12px 20px;">0점 (D)</span>
@@ -1223,7 +1221,7 @@
     <div class="modal-body">
       <div id="modal-report-info">
       </div>
-      <div style="margin-top:14px;padding:12px 14px;background:#f0fdf4;border-radius:10px;font-size:12px;color:#16a34a;display:flex;align-items:center;gap:8px;">
+      <div style="margin-top:14px;padding:12px 14px;background:#f0fdf4;border-radius:2px;font-size:12px;color:#16a34a;display:flex;align-items:center;gap:8px;">
         <span style="font-size:16px;">📱</span>
         <span>조치 입력은 현장 앱(report.html)에서 진행해주세요.</span>
       </div>
@@ -1253,7 +1251,7 @@
       <button class="close-modal" onclick="closeModal('modal-pm-edit')">×</button>
     </div>
     <div class="modal-body">
-      <div id="pm-edit-info" style="margin-bottom:18px; padding:16px; background:var(--primary-light); border-radius:16px; border:1px solid #dce8ff">
+      <div id="pm-edit-info" style="margin-bottom:18px; padding:16px; background:var(--primary-light); border-radius:2px; border:1px solid #dce8ff">
       </div>
       <div style="margin-bottom:10px; font-size:12px; color:var(--text3); font-weight:800">📅 월별 점검 예정일 설정</div>
       <div id="pm-month-grid" style="display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px">
@@ -1279,7 +1277,7 @@
       <!-- 파트 사진 -->
       <div class="form-group" style="margin-bottom:16px">
         <label class="form-label">📸 파트 사진 <span style="color:var(--red)">*</span></label>
-        <div style="width:100%;height:160px;border:2px dashed var(--border,#e5e7eb);border-radius:12px;background:var(--surface2,#f8f9fb);display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;position:relative" onclick="document.getElementById('pm-photo-input').click()">
+        <div style="width:100%;height:160px;border:2px dashed var(--border,#e5e7eb);border-radius:2px;background:var(--surface2,#f8f9fb);display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;position:relative" onclick="document.getElementById('pm-photo-input').click()">
           <span id="pm-photo-placeholder" style="color:var(--text3);text-align:center;line-height:1.8">
             <span style="font-size:32px">📷</span><br>클릭하여 사진 선택<br><small style="font-size:11px">(Google Drive 자동 저장)</small>
           </span>
@@ -1434,24 +1432,24 @@
       <!-- 현재 연결된 설비 -->
       <div style="margin-bottom:14px">
         <div style="font-size:12px;font-weight:700;margin-bottom:6px;color:var(--text,#111)">현재 연결된 설비 <span id="pel-linked-count" style="color:var(--text3,#9ca3af);font-weight:400">(0)</span></div>
-        <div id="pel-linked-list" style="display:flex;flex-wrap:wrap;gap:6px;min-height:32px;padding:6px 8px;border:1px solid var(--border,#e5e7eb);border-radius:8px;background:var(--surface2,#f9fafb)">
+        <div id="pel-linked-list" style="display:flex;flex-wrap:wrap;gap:6px;min-height:32px;padding:6px 8px;border:1px solid var(--border,#e5e7eb);border-radius:2px;background:var(--surface2,#f9fafb)">
           <span id="pel-linked-empty" style="font-size:12px;color:var(--text3,#9ca3af)">연결된 설비 없음</span>
         </div>
       </div>
       <!-- 자동 추천 -->
-      <div id="pel-suggest-section" style="margin-bottom:14px;padding:10px 12px;background:rgba(37,99,235,0.06);border-radius:10px;display:none">
+      <div id="pel-suggest-section" style="margin-bottom:14px;padding:10px 12px;background:rgba(37,99,235,0.06);border-radius:2px;display:none">
         <div style="font-size:12px;font-weight:700;color:var(--primary,#2563eb);margin-bottom:6px">⭐ 자동 추천 — 연결된 설비와 같은 라인/설치소</div>
         <div id="pel-suggest-list" style="display:flex;flex-wrap:wrap;gap:6px"></div>
       </div>
       <!-- 라인 필터 + 검색 -->
       <div style="display:flex;gap:8px;margin-bottom:8px">
-        <select id="pel-location" onchange="filterPELList()" style="flex:0 0 150px;padding:6px 8px;border:1px solid var(--border,#e5e7eb);border-radius:8px;background:var(--surface,#fff);font-size:13px">
+        <select id="pel-location" onchange="filterPELList()" style="flex:0 0 150px;padding:6px 8px;border:1px solid var(--border,#e5e7eb);border-radius:2px;background:var(--surface,#fff);font-size:13px">
           <option value="">전체 라인</option>
         </select>
         <input class="form-control" id="pel-search" placeholder="설비코드, 설비명 검색..." style="flex:1" oninput="filterPELList()" />
       </div>
       <div style="font-size:11px;color:var(--text3,#9ca3af);margin-bottom:6px">체크하면 연결 추가 / 연결된 설비의 × 버튼으로 제거</div>
-      <div id="pel-equip-list" style="max-height:300px;overflow-y:auto;border:1px solid var(--border,#e5e7eb);border-radius:8px"></div>
+      <div id="pel-equip-list" style="max-height:300px;overflow-y:auto;border:1px solid var(--border,#e5e7eb);border-radius:2px"></div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-secondary" onclick="closeModal('modal-parts-equip-link')">취소</button>
@@ -1619,7 +1617,7 @@
     <button onclick="document.getElementById('modal-photo-view').classList.remove('open')"
       style="position:absolute;top:-14px;right:-14px;z-index:10;width:32px;height:32px;border-radius:999px;border:none;background:#fff;color:#374151;font-size:18px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.18);display:flex;align-items:center;justify-content:center;line-height:1">✕</button>
     <img id="modal-photo-view-img" src="" alt="사진 보기"
-      style="max-width:85vw;max-height:85vh;border-radius:14px;box-shadow:0 16px 48px rgba(0,0,0,0.35);object-fit:contain;background:#fff" />
+      style="max-width:85vw;max-height:85vh;border-radius:2px;box-shadow:0 16px 48px rgba(0,0,0,0.35);object-fit:contain;background:#fff" />
   </div>
 </div>
 

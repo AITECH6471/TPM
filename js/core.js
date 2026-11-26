@@ -67,9 +67,9 @@ export async function apiFirst(paths, options = {}) { let lastError = null; for 
 export function getRows(payload) { if (Array.isArray(payload)) return payload; if (Array.isArray(payload?.data)) return payload.data; if (Array.isArray(payload?.items)) return payload.items; return []; }
 export function showToast(message, type = 'info') {
   const result = $('cfg-result');
-  if (result) result.innerHTML = `<div style="padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:var(--surface2)">${escapeHtml(message)}</div>`;
+  if (result) result.innerHTML = `<div style="padding:10px 12px;border:1px solid var(--border);border-radius:2px;background:var(--surface2)">${escapeHtml(message)}</div>`;
   let toast = document.getElementById('_global_toast');
-  if (!toast) { toast = document.createElement('div'); toast.id = '_global_toast'; toast.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9999;padding:14px 28px;border-radius:16px;font-size:15px;font-weight:700;box-shadow:0 8px 32px rgba(0,0,0,0.28);transition:opacity 0.4s;text-align:center;min-width:200px;max-width:400px'; document.body.appendChild(toast); }
+  if (!toast) { toast = document.createElement('div'); toast.id = '_global_toast'; toast.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9999;padding:14px 28px;border-radius:2px;font-size:15px;font-weight:700;box-shadow:0 8px 32px rgba(0,0,0,0.28);transition:opacity 0.4s;text-align:center;min-width:200px;max-width:400px'; document.body.appendChild(toast); }
   toast.textContent = message;
   toast.style.background = type === 'error' ? '#ef4444' : type === 'warn' ? '#f59e0b' : '#16a34a';
   toast.style.color = '#fff';

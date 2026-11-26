@@ -122,7 +122,7 @@ export function openPartsEquipLink(partMasterId) {
     suggestList.innerHTML = [..._pelSuggestedCodes].slice(0, 12).map((code) => {
       const eq = state.equipment.find((e) => pick(e.equip_code, e.code) === code);
       const name = pick(eq?.equip_name, eq?.name, '');
-      return `<label style="display:inline-flex;align-items:center;gap:4px;padding:4px 8px;background:rgba(37,99,235,0.1);border-radius:6px;cursor:pointer;font-size:12px">
+      return `<label style="display:inline-flex;align-items:center;gap:4px;padding:4px 8px;background:rgba(37,99,235,0.1);border-radius:2px;cursor:pointer;font-size:12px">
         <input type="checkbox" data-suggest-code="${escapeHtml(code)}" onchange="togglePELSuggest('${escapeHtml(code)}',this.checked)" />
         ⭐ ${escapeHtml(code)}${name ? ' ' + escapeHtml(name) : ''}
       </label>`;
