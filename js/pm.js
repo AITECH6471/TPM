@@ -333,14 +333,13 @@ function ledHTML() {
     const c = codeOf(e), p = MS.filter((m) => status(c, m) && (past(m) || (S.year === CUR_Y && m === CUR_M))).length, d = MS.filter((m) => ['G', 'N', 'D'].includes(status(c, m))).length;
     return `<tr><td><b>${esc(c)}</b> <span class="pm-mu pm-small">${esc(pick(e.equip_name, ''))}</span></td><td class="pm-mu">${esc(pick(e.location, ''))}</td>${MS.map((m) => { const s = status(c, m); return `<td class="m${S.year === CUR_Y && m === CUR_M ? ' now' : ''}">${s ? `<button class="pm-lc ${s}${S.led.c === c && S.led.m === m ? ' sel' : ''}" data-lc="${esc(c)}" data-lm="${m}" aria-label="${esc(c)} ${m}월 ${LBL[s]}">${SYM[s]}</button>` : ''}</td>`; }).join('')}<td class="pm-mu">${d}/${p}</td></tr>`;
   }).join('');
-  return `<div class="pm-tool"><select class="form-control pm-sm" data-act="line" aria-label="라인">${lineOptions()}</select><button class="btn btn-secondary btn-sm" data-act="csv">엑셀(CSV) 저장</button><span class="pm-mu pm-small">○ 적합 · ✕ 부적합 · 지연 · 예정 · 완료(예전 방식으로 완료 처리되어 점검 기록 없음)</span></div>
+  return `<div class="pm-tool"><select class="form-control pm-sm" data-act="line" aria-label="라인">${lineOptions()}</select><button class="btn btn-secondary btn-sm" data-act="csv">엑셀(CSV) 저장</button><span class="pm-mu pm-small">○ 적합 · ✕ 부적합 · 지연 · 예정 · 완료(예전 방식으로 완료 처리되어 점검 기록 없음) · 칸을 누르면 기록지가 열립니다</span></div>
     <div class="pm-kpis">${kpi}</div>
     <div class="pm-scroll"><table class="pm-mx pm-ledger"><thead><tr><th>설비</th><th>라인</th>${MS.map((m) => `<th class="m${S.year === CUR_Y && m === CUR_M ? ' now' : ''}">${m}월</th>`).join('')}<th>실시</th></tr></thead><tbody>${rows || `<tr><td colspan="15" class="pm-mu">${S.year}년 계획이 없습니다.</td></tr>`}</tbody></table></div>
-    <div class="pm-doc">${docHTML()}</div>`;
+    ${S.led.c && status(S.led.c, S.led.m) ? `<div class="modal-overlay open" data-docov><div class="modal" role="dialog" aria-modal="true" aria-label="정기점검 기록지"><div class="modal-header"><h2>${esc(S.led.c)} · ${S.year}년 ${S.led.m}월</h2><button type="button" class="modal-close" data-act="doc-close" aria-label="닫기">&times;</button></div><div class="modal-body"><div class="pm-doc">${docHTML()}</div></div></div></div>` : ''}`;
 }
 function docHTML() {
   const { c, m } = S.led, s = c ? status(c, m) : '';
-  if (!s) return '<p class="pm-mu">표에서 칸을 누르면 그 달 점검 기록지가 열립니다.</p>';
   const e = eqOf(c), r = res(c, m);
   if (mv(c, m) !== 'D') return `<h4>정기점검 기록지</h4><p>${esc(c)} ${esc(pick(e.equip_name, ''))} · ${S.year}년 ${m}월은 <b class="pm-v ${s}">${LBL[s]}</b> 상태라 아직 확정된 기록이 없습니다.</p><button class="btn btn-primary btn-sm" data-act="open-sheet">점검표에서 입력하기</button>`;
   const items = itemsOf(c), rows = Object.values(r), first = rows[0] || {}, memo = rows.find((x) => x.pass_fail === 'X')?.memo;
@@ -366,6 +365,7 @@ function downloadCSV() {
 // ---------- 이벤트 ----------
 function openSheet(c, m) { S.sel = { c, m }; S.delAsk = null; S.unlockAsk = false; S.msg = ''; S.tab = 'sheet'; render(); }
 async function onClick(e) {
+  if (e.target.hasAttribute?.('data-docov')) { S.led = { c: '', m: 0 }; return render(); } // 기록지 모달 바깥 클릭
   const b = e.target.closest('button, [data-pick], [data-day]');
   if (!b) return;
   const d = b.dataset, c = S.sel.c, m = S.sel.m;
@@ -443,7 +443,8 @@ async function onClick(e) {
   if (d.act === 'go-led') { S.led = { c, m }; S.tab = 'led'; return render(); }
   // 기록 대장
   if (d.lc) { S.led = { c: d.lc, m: num(d.lm) }; return render(); }
-  if (d.act === 'open-sheet') return openSheet(S.led.c, S.led.m);
+  if (d.act === 'doc-close') { S.led = { c: '', m: 0 }; return render(); }
+  if (d.act === 'open-sheet') { const { c: lc, m: lm } = S.led; S.led = { c: '', m: 0 }; return openSheet(lc, lm); }
   if (d.act === 'csv') return downloadCSV();
 }
 async function onChange(e) {
@@ -474,7 +475,8 @@ export function initPM() {
   if (bound) return;
   bound = true;
   const page = $('page-pm-plan');
-  page.querySelectorAll('[data-pmtab]').forEach((b) => b.addEventListener('click', () => { S.tab = b.dataset.pmtab; S.msg = ''; S.pending = null; render(); }));
+  page.querySelectorAll('[data-pmtab]').forEach((b) => b.addEventListener('click', () => { S.tab = b.dataset.pmtab; S.msg = ''; S.pending = null; S.led = { c: '', m: 0 }; render(); }));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && $('pm-body').querySelector('[data-docov]')) { S.led = { c: '', m: 0 }; render(); } });
   $('pm-year-sel').addEventListener('change', (e) => { S.year = num(e.target.value); S.calM = S.year === CUR_Y ? CUR_M : 1; S.pending = null; S.msg = ''; S.led = { c: '', m: 0 }; loadPM(); });
   const body = $('pm-body');
   body.addEventListener('click', onClick);

@@ -309,6 +309,7 @@ th { font-size: 14px !important; }
 .pm-lc.D { color: #5b6170; background: #e4e6eb; font-size: 11px !important; }
 .pm-lc.sel { outline: 2px solid var(--text); outline-offset: 1px; }
 .pm-doc { margin: 14px; border: 1px solid var(--text); padding: 12px 14px; max-width: 760px; }
+.modal .pm-doc { margin: 0; max-width: none; }
 .pm-doc h4 { margin: 0 0 8px; text-align: center; letter-spacing: .12em; }
 .pm-dochd { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border: 1px solid var(--text); border-bottom: 0; }
 .pm-dochd div { padding: 4px 8px; border-right: 1px solid var(--text); border-bottom: 1px solid var(--text); }
