@@ -95,14 +95,14 @@ tbody tr:hover td { background: #f8f9fc; }
 .badge-status.낮음 { background: var(--green-light); color: var(--green); }
 
 /* 버튼 */
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 36px; padding: 0 14px; border-radius: var(--radius); border: 1px solid var(--border); background: #fff; color: var(--text); font-size: 14px; font-weight: 600; font-family: inherit; cursor: pointer; white-space: nowrap; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 36px; padding: 0 14px; border-radius: var(--radius); border: 1px solid var(--border); background: #fff; color: var(--text); font-size: 14px; font-weight: 600; font-family: inherit; cursor: pointer; white-space: nowrap; }
 .btn:hover { background: #f5f6f8; }
 .btn-primary { background: var(--primary); border-color: var(--primary); color: #fff; }
 .btn-primary:hover { background: var(--primary-h); border-color: var(--primary-h); }
 .btn-secondary { background: #fff; color: var(--text); border-color: var(--border); }
 .btn-danger { background: #fff; color: var(--red); border-color: var(--red); }
 .btn-danger:hover { background: var(--red-light); }
-.btn-sm { height: 30px; padding: 0 10px; font-size: 13px; }
+.btn-sm { min-height: 30px; padding: 0 10px; font-size: 13px; }
 .btn:focus-visible, .form-control:focus-visible, .nav-item:focus-visible { outline: 2px solid var(--primary); outline-offset: 1px; }
 
 /* 폼 */
