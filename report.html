@@ -945,24 +945,7 @@
               </div>
             </div>
 
-            <div class="fg">
-              <label class="fl">긴급도</label>
-              <div class="chips" id="priC">
-                <button type="button" class="chip c-긴급" data-v="긴급" onclick="selC(this,'p')">🔴 긴급</button>
-                <button type="button" class="chip c-보통 c-on" data-v="보통" onclick="selC(this,'p')">🟠 보통</button>
-                <button type="button" class="chip c-낮음" data-v="낮음" onclick="selC(this,'p')">🟢 낮음</button>
-              </div>
-              <div class="helper">긴급: 라인 정지 / 안전위험 / 연기·누유 / 즉시 조치 필요</div>
-            </div>
 
-            <div class="fg">
-              <label class="fl">라인정지 여부</label>
-              <div class="chips" id="impactC">
-                <button type="button" class="chip c-라인정지" data-v="라인정지" onclick="selC(this,'i')">⛔ 라인정지</button>
-                <button type="button" class="chip c-부분정지" data-v="부분정지" onclick="selC(this,'i')">⚠️ 부분정지</button>
-                <button type="button" class="chip c-생산가능 c-on" data-v="생산가능" onclick="selC(this,'i')">✅ 생산가능</button>
-              </div>
-            </div>
 
             <div class="fg">
               <label class="fl">대표 증상 선택</label>
@@ -1319,7 +1302,7 @@
     let curStatusFlt = "";
     let lockedEquipCode = "";
     let selType = "설비고장";
-    let selPri = "보통";
+    let selPri = "보통";      // 화면에서 뺀 항목: 기본값만 저장
     let selImpact = "생산가능";
 
     const symptomOptions = [
@@ -1864,11 +1847,7 @@
       selImpact = "생산가능";
 
       document.querySelectorAll("#typeC .chip").forEach(c => c.classList.remove("c-on"));
-      document.querySelectorAll("#priC .chip").forEach(c => c.classList.remove("c-on"));
-      document.querySelectorAll("#impactC .chip").forEach(c => c.classList.remove("c-on"));
       document.querySelector('#typeC .chip[data-v="설비고장"]').classList.add("c-on");
-      document.querySelector('#priC .chip[data-v="보통"]').classList.add("c-on");
-      document.querySelector('#impactC .chip[data-v="생산가능"]').classList.add("c-on");
     }
 
     function initActYearOptions() {
